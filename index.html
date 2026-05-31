@@ -3,480 +3,178 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Treasure Tracker Fixed</title>
+<title>Valegate Treasure Tracker Live</title>
 <style>
 *{box-sizing:border-box}
-body{
- margin:0;
- font-family:Arial,-apple-system,BlinkMacSystemFont,sans-serif;
- background:#4b2b10;
- color:#3b240f;
-}
-.app{
- max-width:480px;
- margin:auto;
- min-height:100vh;
- background:#fff5df;
- padding-bottom:90px;
-}
-.header{
- background:linear-gradient(135deg,#9a6b32,#4b2b10);
- color:white;
- text-align:center;
- padding:42px 20px 80px;
-}
-.gem{font-size:54px}
-.title{
- font-size:46px;
- font-weight:900;
- letter-spacing:4px;
- margin:8px 0 14px;
-}
-.brands{
- display:flex;
- justify-content:center;
- align-items:center;
- gap:8px;
-}
-.tk{
- background:#e30613;
- color:white;
- border:2px solid #f5bc21;
- border-radius:50%;
- width:62px;height:62px;
- display:flex;align-items:center;justify-content:center;
- font-weight:900;
-}
+body{margin:0;font-family:Arial,-apple-system,BlinkMacSystemFont,sans-serif;background:#4b2b10;color:#3b240f}
+.app{max-width:480px;margin:auto;min-height:100vh;background:#fff5df;padding-bottom:90px}
+.header{background:linear-gradient(135deg,#9a6b32,#4b2b10);color:white;text-align:center;padding:38px 20px 78px}
+.gem{font-size:54px}.title{font-size:42px;font-weight:900;letter-spacing:4px;margin:8px 0 10px}
+.store{background:rgba(255,255,255,.15);display:inline-block;padding:8px 16px;border-radius:999px;font-weight:900;margin-bottom:14px}
+.brands{display:flex;justify-content:center;align-items:center;gap:8px}
+.tk{background:#e30613;color:white;border:2px solid #f5bc21;border-radius:50%;width:62px;height:62px;display:flex;align-items:center;justify-content:center;font-weight:900}
 .amp{font-size:38px;font-weight:900}
-.hs{
- width:66px;height:58px;
- background:#d8ec72;
- border:3px solid #a6bf2e;
- color:#40551f;
- display:flex;align-items:center;justify-content:center;
- font-weight:900;
- font-family:Georgia,serif;
- line-height:1;
-}
-.content{
- padding:0 16px 20px;
- margin-top:-48px;
-}
-.card{
- background:#fffaf0;
- border-radius:18px;
- padding:20px;
- margin-bottom:16px;
- box-shadow:0 8px 20px rgba(62,36,12,.13);
- border:1px solid #eadcc4;
-}
-.name-row{
- display:flex;
- justify-content:space-between;
- gap:12px;
- align-items:center;
-}
-.name{
- font-size:34px;
- font-weight:900;
-}
-button{
- cursor:pointer;
- -webkit-tap-highlight-color:transparent;
-}
-.small-btn{
- background:white;
- border:2px solid #8b5b24;
- color:#5b3515;
- border-radius:12px;
- padding:12px;
- font-weight:900;
-}
-.total{
- text-align:center;
- font-size:72px;
- font-weight:900;
- color:#5b3515;
- margin:12px 0;
-}
-.total span{
- color:#777;
- font-size:46px;
-}
-.progress{
- height:38px;
- background:#eadcc4;
- border-radius:13px;
- overflow:hidden;
-}
-.bar{
- height:100%;
- width:0%;
- min-width:42px;
- background:linear-gradient(90deg,#714315,#9b6828);
- color:white;
- display:flex;
- justify-content:flex-end;
- align-items:center;
- padding-right:12px;
- font-weight:900;
- border-radius:13px;
- transition:.3s;
-}
-.remaining{
- text-align:center;
- margin-top:12px;
- font-size:17px;
-}
-.grid{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:10px;
-}
-.mini strong{
- display:block;
- font-size:32px;
- color:#5b3515;
-}
-.mini b{
- font-size:13px;
- text-transform:uppercase;
- color:#5b3515;
-}
-.add-btn{
- width:100%;
- border:none;
- border-radius:18px;
- background:linear-gradient(135deg,#7d4b1b,#9d6b2d);
- color:white;
- padding:22px;
- font-size:21px;
- font-weight:900;
- text-align:left;
- display:flex;
- align-items:center;
- gap:14px;
- box-shadow:0 8px 18px rgba(91,53,21,.25);
-}
-.add-btn span{font-size:42px}
-.add-btn small{
- display:block;
- font-size:15px;
- font-weight:400;
- margin-top:4px;
-}
-.leader-title{
- font-size:18px;
- font-weight:900;
- color:#5b3515;
- margin-bottom:12px;
- text-transform:uppercase;
-}
-.row{
- display:flex;
- align-items:center;
- gap:12px;
- border-bottom:1px solid #eadcc4;
- padding:12px 4px;
- font-size:20px;
- font-weight:800;
-}
-.row.you{
- background:#f1dfbf;
- border-radius:10px;
- padding:12px;
-}
-.badge{
- width:34px;height:34px;border-radius:50%;
- background:#b9893c;color:white;
- display:flex;align-items:center;justify-content:center;
- font-weight:900;
-}
-.score{margin-left:auto}
-.bottom{
- position:fixed;
- left:50%;
- bottom:0;
- transform:translateX(-50%);
- width:100%;
- max-width:480px;
- height:76px;
- display:grid;
- grid-template-columns:repeat(3,1fr);
- background:linear-gradient(180deg,#8e6129,#5b3515);
- z-index:10;
-}
-.bottom button{
- border:none;
- background:transparent;
- color:white;
- font-weight:800;
- font-size:14px;
-}
-.overlay{
- position:fixed;
- inset:0;
- background:rgba(0,0,0,.65);
- display:none;
- align-items:center;
- justify-content:center;
- padding:20px;
- z-index:99;
-}
-.popup{
- background:#fffaf0;
- border-radius:24px;
- max-width:420px;
- width:100%;
- padding:28px 20px;
- text-align:center;
-}
-.popup h1{
- margin:8px 0;
- font-size:40px;
- color:#5b3515;
-}
-.popup p{
- font-size:21px;
-}
-.popup input{
- width:100%;
- padding:18px;
- border:2px solid #d8c4a4;
- border-radius:14px;
- font-size:24px;
- text-align:center;
- margin:16px 0;
-}
-.main-btn{
- width:100%;
- border:none;
- border-radius:14px;
- background:linear-gradient(90deg,#7d4b1b,#9d6b2d);
- color:white;
- font-size:22px;
- font-weight:900;
- padding:17px;
-}
-.confetti{
- position:fixed;
- top:-20px;
- width:10px;
- height:18px;
- z-index:120;
- pointer-events:none;
- animation:fall 1.8s linear forwards;
-}
-@keyframes fall{
- to{transform:translateY(110vh) rotate(720deg);opacity:.8}
-}
+.hs{width:66px;height:58px;background:#d8ec72;border:3px solid #a6bf2e;color:#40551f;display:flex;align-items:center;justify-content:center;font-weight:900;font-family:Georgia,serif;line-height:1}
+.content{padding:0 16px 20px;margin-top:-48px}
+.card{background:#fffaf0;border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:0 8px 20px rgba(62,36,12,.13);border:1px solid #eadcc4}
+.name-row{display:flex;justify-content:space-between;gap:12px;align-items:center}.name{font-size:34px;font-weight:900}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.small-btn{background:white;border:2px solid #8b5b24;color:#5b3515;border-radius:12px;padding:12px;font-weight:900}
+.total{text-align:center;font-size:72px;font-weight:900;color:#5b3515;margin:12px 0}.total span{color:#777;font-size:46px}
+.progress{height:38px;background:#eadcc4;border-radius:13px;overflow:hidden}
+.bar{height:100%;width:0%;min-width:42px;background:linear-gradient(90deg,#714315,#9b6828);color:white;display:flex;justify-content:flex-end;align-items:center;padding-right:12px;font-weight:900;border-radius:13px;transition:.3s}
+.remaining{text-align:center;margin-top:12px;font-size:17px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mini strong{display:block;font-size:30px;color:#5b3515;line-height:1.1}.mini b{font-size:13px;text-transform:uppercase;color:#5b3515}
+.add-btn{width:100%;border:none;border-radius:18px;background:linear-gradient(135deg,#7d4b1b,#9d6b2d);color:white;padding:22px;font-size:20px;font-weight:900;text-align:left;display:flex;align-items:center;gap:14px;box-shadow:0 8px 18px rgba(91,53,21,.25)}
+.add-btn span{font-size:42px}.add-btn small{display:block;font-size:15px;font-weight:400;margin-top:4px}
+.leader-title{font-size:18px;font-weight:900;color:#5b3515;margin-bottom:12px;text-transform:uppercase}
+.row{display:flex;align-items:center;gap:12px;border-bottom:1px solid #eadcc4;padding:12px 4px;font-size:20px;font-weight:800}
+.row.you{background:#f1dfbf;border-radius:10px;padding:12px}.badge{width:34px;height:34px;border-radius:50%;background:#b9893c;color:white;display:flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0}.score{margin-left:auto}
+.status{font-size:13px;padding:8px 12px;border-radius:999px;background:#f1dfbf;display:inline-block;margin-top:8px;color:#3b240f}
+.bottom{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:100%;max-width:480px;height:76px;display:grid;grid-template-columns:repeat(4,1fr);background:linear-gradient(180deg,#8e6129,#5b3515);z-index:10}
+.bottom button{border:none;background:transparent;color:white;font-weight:800;font-size:13px}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;padding:20px;z-index:99}
+.popup{background:#fffaf0;border-radius:24px;max-width:420px;width:100%;padding:28px 20px;text-align:center}
+.popup h1{margin:8px 0;font-size:38px;color:#5b3515}.popup p{font-size:20px}
+.popup input{width:100%;padding:18px;border:2px solid #d8c4a4;border-radius:14px;font-size:24px;text-align:center;margin:16px 0}
+.main-btn{width:100%;border:none;border-radius:14px;background:linear-gradient(90deg,#7d4b1b,#9d6b2d);color:white;font-size:22px;font-weight:900;padding:17px;margin-top:8px}
+.ghost-btn{width:100%;border:2px solid #8b5b24;border-radius:14px;background:white;color:#5b3515;font-size:18px;font-weight:900;padding:14px;margin-top:10px}
+.confetti{position:fixed;top:-20px;width:10px;height:18px;z-index:120;pointer-events:none;animation:fall 1.8s linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.8}}
 </style>
 </head>
 <body>
-
 <div class="app">
- <div class="header">
-   <div class="gem">💎</div>
-   <div class="title">TREASURE</div>
-   <div class="brands">
-     <div class="tk">TK·maxx</div>
-     <div class="amp">&</div>
-     <div class="hs">HOME<br>SENSE</div>
-   </div>
- </div>
-
- <div class="content">
-   <div class="card name-row">
-     <div>
-       <div>Welcome back,</div>
-       <div class="name"><span id="nameText">Team</span> 👋</div>
-     </div>
-     <button class="small-btn" type="button" onclick="openName()">CHANGE NAME</button>
-   </div>
-
-   <div class="card">
-     <b>TODAY'S STORE TOTAL</b>
-     <div class="total"><span id="todayTotal">0</span> <span>/ 50</span></div>
-     <div class="progress"><div class="bar" id="bar">0%</div></div>
-     <div class="remaining"><b id="remaining">50</b> more to reach today's target! 💎</div>
-   </div>
-
-   <div class="grid">
-     <div class="card mini">
-       <b>Week Total</b>
-       <strong id="weekTotal">0</strong>
-       <div>This Week</div>
-     </div>
-     <div class="card mini">
-       <b>Best Today</b>
-       <strong id="bestToday">-</strong>
-       <div id="bestCards">0 cards</div>
-     </div>
-   </div>
-
-   <button class="add-btn" type="button" onclick="addTreasure()">
-     <span>💎</span>
-     <div>I RECRUITED A TREASURE CUSTOMER<small>Tap here when you get a card</small></div>
-   </button>
-
-   <div class="card" style="margin-top:16px">
-     <div class="leader-title">Today's Top Recruiters</div>
-     <div id="leaderboard"></div>
-   </div>
- </div>
-
- <div class="bottom">
-   <button type="button" onclick="render()">🏠<br>Home</button>
-   <button type="button" onclick="showHistory()">🕘<br>History</button>
-   <button type="button" onclick="resetAll()">•••<br>Reset</button>
- </div>
+  <div class="header">
+    <div class="gem">💎</div>
+    <div class="title">TREASURE</div>
+    <div class="store">VALEGATE</div>
+    <div class="brands"><div class="tk">TK·maxx</div><div class="amp">&</div><div class="hs">HOME<br>SENSE</div></div>
+    <div class="status" id="liveStatus">Connecting live data...</div>
+  </div>
+  <div class="content">
+    <div class="card name-row"><div><div>Welcome back,</div><div class="name"><span id="nameText">Team</span> 👋</div></div><button class="small-btn" onclick="openName()">CHANGE NAME</button></div>
+    <div class="card"><b>TODAY'S STORE TOTAL</b><div class="total"><span id="todayTotal">0</span> <span>/ 50</span></div><div class="progress"><div class="bar" id="bar">0%</div></div><div class="remaining"><b id="remaining">50</b> more to reach today's target! 💎</div></div>
+    <div class="grid"><div class="card mini"><b>Week Total</b><strong id="weekTotal">0</strong><div>This Week</div></div><div class="card mini"><b>Best Today</b><strong id="bestToday">-</strong><div id="bestCards">0 cards</div></div></div>
+    <button class="add-btn" onclick="addTreasure()"><span>💎</span><div>I RECRUITED A TREASURE CUSTOMER<small>Tap here when you get a card</small></div></button>
+    <div class="card" style="margin-top:16px"><div class="leader-title">Today's Top Recruiters</div><div id="leaderboard"><p>Loading leaderboard...</p></div></div>
+  </div>
+  <div class="bottom"><button onclick="render()">🏠<br>Home</button><button onclick="showHistory()">🕘<br>History</button><button onclick="openManager()">📊<br>Manager</button><button onclick="openName()">👤<br>Name</button></div>
 </div>
 
-<div class="overlay" id="nameOverlay">
- <div class="popup">
-   <div class="gem">💎</div>
-   <h1>Your Name</h1>
-   <p>Enter your name once, then every card is one tap.</p>
-   <input id="nameInput" placeholder="Type your name">
-   <button class="main-btn" type="button" onclick="saveName()">SAVE NAME</button>
- </div>
-</div>
+<div class="overlay" id="nameOverlay"><div class="popup"><div class="gem">💎</div><h1>Your Name</h1><p>Enter your name once. Every card after that is one tap.</p><input id="nameInput" placeholder="Type your name"><button class="main-btn" onclick="saveName()">SAVE NAME</button></div></div>
+<div class="overlay" id="successOverlay"><div class="popup"><div class="gem">💎</div><h1>NICE ONE!</h1><p><b id="successName">You</b>, you've recruited a Treasure customer!</p><div class="total" style="font-size:50px">+1</div><p>Today's Store Total</p><div class="total" style="font-size:54px"><span id="successTotal">0</span> <span>/ 50</span></div><button class="main-btn" onclick="closeSuccess()">AWESOME!</button></div></div>
+<div class="overlay" id="managerOverlay"><div class="popup"><h1>Manager View</h1><p id="managerText">Loading...</p><button class="ghost-btn" onclick="copySummary()">COPY SUMMARY</button><button class="ghost-btn" onclick="resetToday()">RESET TODAY</button><button class="main-btn" onclick="closeManager()">CLOSE</button></div></div>
 
-<div class="overlay" id="successOverlay">
- <div class="popup">
-   <div class="gem">💎</div>
-   <h1>NICE ONE!</h1>
-   <p><b id="successName">You</b>, you've recruited a Treasure customer!</p>
-   <div class="total" style="font-size:50px">+1</div>
-   <p>Today's Store Total</p>
-   <div class="total" style="font-size:54px"><span id="successTotal">0</span> <span>/ 50</span></div>
-   <button class="main-btn" type="button" onclick="closeSuccess()">AWESOME!</button>
- </div>
-</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getDatabase, ref, push, onValue, remove, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
 
-<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyB1mIRzjLZTE8MhH6ArcXtFxrHNsDN79SE",
+  authDomain: "treasure-tracker-2389e.firebaseapp.com",
+  databaseURL: "https://treasure-tracker-2389e-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "treasure-tracker-2389e",
+  storageBucket: "treasure-tracker-2389e.firebasestorage.app",
+  messagingSenderId: "551389312479",
+  appId: "1:551389312479:web:7f69c16804fde452c0806a",
+  measurementId: "G-JXNGBP00KR"
+};
+
 const TARGET = 50;
-const KEY = "treasureTrackerFixedV1";
-let store = JSON.parse(localStorage.getItem(KEY) || '{"name":"","entries":[]}');
+const STORE = "Valegate";
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const entriesRef = ref(db, "stores/valegate/entries");
 
-function todayKey(){
- const d = new Date();
- return d.toISOString().slice(0,10);
-}
+let localName = localStorage.getItem("treasureName") || "";
+let entries = [];
 
-function save(){
- localStorage.setItem(KEY, JSON.stringify(store));
+function todayKey(){ return new Date().toISOString().slice(0,10); }
+function weekKey(dateString){
+  const d = new Date(dateString + "T00:00:00");
+  const onejan = new Date(d.getFullYear(),0,1);
+  return d.getFullYear()+"-W"+Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7);
 }
+function thisWeekKey(){ return weekKey(todayKey()); }
 
-function openName(){
- document.getElementById("nameInput").value = store.name || "";
- document.getElementById("nameOverlay").style.display = "flex";
+window.openName = function(){ document.getElementById("nameInput").value = localName; document.getElementById("nameOverlay").style.display = "flex"; }
+window.saveName = function(){
+  const n = document.getElementById("nameInput").value.trim();
+  if(!n){ alert("Please type your name first."); return; }
+  localName = n; localStorage.setItem("treasureName", n);
+  document.getElementById("nameOverlay").style.display = "none"; render();
 }
+window.addTreasure = function(){
+  if(!localName){ openName(); return; }
+  push(entriesRef, {store:STORE,name:localName,date:todayKey(),week:thisWeekKey(),time:new Date().toISOString(),createdAt:serverTimestamp()})
+  .then(()=>{ confetti(); document.getElementById("successName").textContent = localName; document.getElementById("successOverlay").style.display = "flex"; })
+  .catch(err=>alert("Could not save card: " + err.message));
+}
+window.closeSuccess = function(){ document.getElementById("successOverlay").style.display = "none"; }
+window.render = render;
 
-function saveName(){
- const name = document.getElementById("nameInput").value.trim();
- if(!name){
-   alert("Please type your name first.");
-   return;
- }
- store.name = name;
- save();
- document.getElementById("nameOverlay").style.display = "none";
- render();
-}
-
-function addTreasure(){
- if(!store.name){
-   openName();
-   return;
- }
- store.entries.push({
-   name: store.name,
-   date: todayKey(),
-   time: new Date().toISOString()
- });
- save();
- render();
- confetti();
- document.getElementById("successName").textContent = store.name;
- document.getElementById("successTotal").textContent = todayEntries().length;
- document.getElementById("successOverlay").style.display = "flex";
-}
-
-function closeSuccess(){
- document.getElementById("successOverlay").style.display = "none";
-}
-
-function todayEntries(){
- return store.entries.filter(e => e.date === todayKey());
-}
-
-function todayCounts(){
- const counts = {};
- todayEntries().forEach(e => counts[e.name] = (counts[e.name] || 0) + 1);
- return counts;
-}
+function todayEntries(){ return entries.filter(e => e.date === todayKey()); }
+function weekEntries(){ return entries.filter(e => e.week === thisWeekKey()); }
+function todayCounts(){ const counts={}; todayEntries().forEach(e=>counts[e.name]=(counts[e.name]||0)+1); return counts; }
 
 function render(){
- document.getElementById("nameText").textContent = store.name || "Team";
- const total = todayEntries().length;
- const percent = Math.min(100, Math.round((total / TARGET) * 100));
- document.getElementById("todayTotal").textContent = total;
- document.getElementById("weekTotal").textContent = store.entries.length;
- document.getElementById("remaining").textContent = Math.max(0, TARGET-total);
- document.getElementById("bar").style.width = Math.max(8, percent) + "%";
- document.getElementById("bar").textContent = percent + "%";
-
- const counts = todayCounts();
- const list = Object.entries(counts).sort((a,b) => b[1]-a[1]);
- document.getElementById("bestToday").textContent = list.length ? list[0][0] : "-";
- document.getElementById("bestCards").textContent = list.length ? list[0][1] + " cards" : "0 cards";
-
- const lb = document.getElementById("leaderboard");
- lb.innerHTML = "";
- if(!list.length){
-   lb.innerHTML = "<p>No Treasure cards logged yet today.</p>";
- } else {
-   list.forEach((item, index) => {
-     const row = document.createElement("div");
-     row.className = "row" + (item[0] === store.name ? " you" : "");
-     row.innerHTML = '<div class="badge">'+(index+1)+'</div><div>'+item[0]+(item[0]===store.name?' (You)':'')+'</div><div class="score">'+item[1]+'</div>';
-     lb.appendChild(row);
-   });
- }
+  document.getElementById("nameText").textContent = localName || "Team";
+  const today = todayEntries(); const total = today.length; const percent = Math.min(100, Math.round((total/TARGET)*100));
+  document.getElementById("todayTotal").textContent = total;
+  document.getElementById("weekTotal").textContent = weekEntries().length;
+  document.getElementById("remaining").textContent = Math.max(0,TARGET-total);
+  document.getElementById("bar").style.width = Math.max(8,percent) + "%";
+  document.getElementById("bar").textContent = percent + "%";
+  document.getElementById("successTotal").textContent = total;
+  const list = Object.entries(todayCounts()).sort((a,b)=>b[1]-a[1]);
+  document.getElementById("bestToday").textContent = list.length ? list[0][0] : "-";
+  document.getElementById("bestCards").textContent = list.length ? list[0][1] + " cards" : "0 cards";
+  const lb = document.getElementById("leaderboard"); lb.innerHTML = "";
+  if(!list.length){ lb.innerHTML = "<p>No Treasure cards logged yet today.</p>"; }
+  else{
+    list.forEach((item,index)=>{
+      const row=document.createElement("div"); row.className="row"+(item[0]===localName?" you":"");
+      const medal=index===0?"🥇":index===1?"🥈":index===2?"🥉":index+1;
+      row.innerHTML='<div class="badge">'+medal+'</div><div>'+item[0]+(item[0]===localName?' (You)':'')+'</div><div class="score">'+item[1]+'</div>';
+      lb.appendChild(row);
+    });
+  }
 }
-
-function showHistory(){
- const recent = store.entries.slice(-10).reverse();
- alert(recent.length ? recent.map(e => new Date(e.time).toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"}) + " - " + e.name).join("\n") : "No history yet.");
+window.showHistory = function(){
+  const recent = entries.slice(-10).reverse();
+  alert(recent.length ? recent.map(e => new Date(e.time).toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"}) + " - " + e.name).join("\n") : "No history yet.");
 }
-
-function resetAll(){
- if(confirm("Reset all cards saved on this phone?")){
-   store.entries = [];
-   save();
-   render();
- }
+window.openManager = function(){
+  const list = Object.entries(todayCounts()).sort((a,b)=>b[1]-a[1]);
+  const lines = ["Valegate Treasure Tracker","Today: "+todayEntries().length+" / "+TARGET,"This week: "+weekEntries().length,"","Today's leaderboard:",...(list.length?list.map((x,i)=>(i+1)+". "+x[0]+" - "+x[1]):["No cards logged yet."])];
+  document.getElementById("managerText").innerText = lines.join("\n");
+  document.getElementById("managerOverlay").style.display = "flex";
 }
-
+window.closeManager = function(){ document.getElementById("managerOverlay").style.display = "none"; }
+window.copySummary = function(){ navigator.clipboard.writeText(document.getElementById("managerText").innerText).then(()=>alert("Summary copied.")); }
+window.resetToday = function(){
+  const pin = prompt("Manager PIN:");
+  if(pin !== "3560"){ alert("Incorrect PIN."); return; }
+  if(confirm("Reset today's Valegate entries?")){
+    Promise.all(todayEntries().map(e=>remove(ref(db,"stores/valegate/entries/"+e.id)))).then(()=>alert("Today reset."));
+  }
+}
 function confetti(){
- const colors = ["#e30613","#b9893c","#fff1c9","#5f8f3a","#f46b36"];
- for(let i=0;i<70;i++){
-   const c = document.createElement("div");
-   c.className = "confetti";
-   c.style.left = Math.random()*100 + "vw";
-   c.style.background = colors[Math.floor(Math.random()*colors.length)];
-   c.style.animationDelay = Math.random()*0.6 + "s";
-   document.body.appendChild(c);
-   setTimeout(() => c.remove(), 2500);
- }
+  const colors=["#e30613","#b9893c","#fff1c9","#5f8f3a","#f46b36"];
+  for(let i=0;i<70;i++){const c=document.createElement("div");c.className="confetti";c.style.left=Math.random()*100+"vw";c.style.background=colors[Math.floor(Math.random()*colors.length)];c.style.animationDelay=Math.random()*0.6+"s";document.body.appendChild(c);setTimeout(()=>c.remove(),2500);}
 }
 
-render();
-setTimeout(() => {
- if(!store.name) openName();
-}, 400);
+onValue(entriesRef, snapshot=>{
+  const val = snapshot.val() || {};
+  entries = Object.entries(val).map(([id,data])=>({id,...data}));
+  document.getElementById("liveStatus").textContent = "Live data connected";
+  render();
+}, error=>{
+  document.getElementById("liveStatus").textContent = "Live data error";
+  alert("Firebase error: " + error.message);
+});
+setTimeout(()=>{ if(!localName) openName(); },500);
 </script>
-
 </body>
 </html>
