@@ -3,6 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Treasure">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#e30613">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
+
 <title>Valegate Treasure Tracker</title>
 <style>
 *{box-sizing:border-box}
@@ -20,21 +27,456 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans
 .progress{height:42px;background:#ecddc4;border-radius:999px;overflow:hidden}.bar{height:100%;width:8%;background:linear-gradient(90deg,#704315,#b8893d,#e2c080);display:flex;justify-content:flex-end;align-items:center;padding-right:13px;color:white;font-weight:950;border-radius:999px;transition:.55s}.remaining{margin-top:14px;text-align:center;color:#4b2b10;font-size:16px;font-weight:750}
 .milestones{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:14px}.milestone{text-align:center;background:#f0dfbf;border-radius:14px;padding:9px 4px;font-size:12px;font-weight:900;color:#6b451c;opacity:.65}.milestone.hit{opacity:1;background:linear-gradient(135deg,#b8893d,#e2c080);color:white}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat-card{min-height:116px}.stat-card strong{display:block;font-size:31px;color:#4b2b10;margin-top:7px}.stat-icon{width:44px;height:44px;border-radius:16px;background:linear-gradient(135deg,#f4e1bd,#fff8ed);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:10px}
-.add-btn{width:100%;border:none;border-radius:26px;padding:20px;margin:3px 0 14px;color:white;background:linear-gradient(135deg,#4b2b10,#8d5f2a 55%,#d6ad6a);box-shadow:0 16px 30px rgba(75,43,16,.30);display:flex;align-items:center;gap:14px;text-align:left;animation:softPulse 2.4s ease-in-out infinite}.add-gem{width:56px;height:56px;border-radius:20px;background:rgba(255,255,255,.17);display:flex;align-items:center;justify-content:center;font-size:32px}.add-btn b{display:block;font-size:19px}.add-btn small{display:block;font-size:14px;font-weight:500;opacity:.92;margin-top:5px}
+.add-btn{
+width:100%;
+border:none;
+border-radius:30px;
+padding:28px 22px;
+margin:6px 0 16px;
+color:white;
+background:
+radial-gradient(circle at 50% 18%,rgba(255,255,255,.30),transparent 22%),
+linear-gradient(135deg,#3a1d08,#8d5f2a 58%,#e2c080);
+box-shadow:0 18px 34px rgba(75,43,16,.36),0 0 0 1px rgba(255,255,255,.14) inset;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:10px;
+text-align:center;
+position:relative;
+overflow:hidden;
+animation:treasurePulse 2.4s ease-in-out infinite;
+}
+.add-btn:before{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(105deg,transparent 15%,rgba(255,255,255,.24) 45%,transparent 68%);
+transform:translateX(-120%);
+animation:treasureSweep 3s ease-in-out infinite;
+}
+@keyframes treasureSweep{0%,45%{transform:translateX(-120%)}75%,100%{transform:translateX(120%)}}
+@keyframes treasurePulse{50%{transform:scale(1.018);box-shadow:0 22px 42px rgba(75,43,16,.44),0 0 22px rgba(226,192,128,.35)}}
+.add-gem{
+width:88px;
+height:88px;
+border-radius:30px;
+background:rgba(255,255,255,.16);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:54px;
+position:relative;
+z-index:2;
+filter:drop-shadow(0 10px 14px rgba(0,0,0,.25));
+}
+.add-btn div:not(.add-gem){position:relative;z-index:2}
+.add-btn b{
+display:block;
+font-size:29px;
+letter-spacing:1px;
+line-height:1.05;
+text-transform:uppercase;
+}
+.add-btn small{
+display:block;
+font-size:16px;
+font-weight:700;
+opacity:.94;
+margin-top:6px;
+}
+.activity-row{
+display:flex;
+gap:11px;
+align-items:flex-start;
+padding:11px 0;
+border-bottom:1px solid rgba(91,53,21,.10);
+}
+.activity-row:last-child{border-bottom:none}
+.activity-icon{
+width:36px;height:36px;border-radius:14px;background:linear-gradient(135deg,#b8893d,#e2c080);
+display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+}
+.activity-main{font-weight:850;color:#4b2b10}
+.activity-time{font-size:12px;color:#7b684f;margin-top:2px}
 .leader-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.row{display:flex;align-items:center;gap:12px;padding:12px 6px;margin-bottom:7px;border-radius:16px;background:linear-gradient(90deg,#fffaf0,#fffdf8);border:1px solid rgba(91,53,21,.07);font-size:18px;font-weight:850}.row.you{background:linear-gradient(90deg,#f1d8a8,#fff7e8);box-shadow:0 8px 20px rgba(184,137,61,.18)}.medal{width:38px;height:38px;border-radius:15px;background:linear-gradient(135deg,#8f642c,#d8b676);color:white;display:flex;align-items:center;justify-content:center;font-weight:950}.score{margin-left:auto;font-size:22px;font-weight:950}
-.nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:100%;max-width:480px;height:82px;background:rgba(45,24,8,.96);display:grid;grid-template-columns:repeat(4,1fr);z-index:20}.nav button{border:none;background:transparent;color:rgba(255,255,255,.78);font-weight:850;font-size:12px}.nav span{display:block;font-size:24px;margin-bottom:4px}
+.conversion-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.conv-box{background:#fff7e8;border:1px solid rgba(91,53,21,.09);border-radius:16px;padding:13px}.conv-box b{display:block;font-size:22px;color:#4b2b10;margin-top:4px}.conv-input{width:100%;border:2px solid #ecdabe;background:#fffdf7;border-radius:16px;padding:15px;font-size:24px;font-weight:900;text-align:center;color:#4b2b10;margin:10px 0}.conv-status{margin-top:12px;padding:13px;border-radius:16px;background:linear-gradient(135deg,#4b2b10,#8d5f2a);color:white;font-weight:900;text-align:center}.nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:100%;max-width:480px;height:82px;background:rgba(45,24,8,.96);display:grid;grid-template-columns:repeat(4,1fr);z-index:20}.nav button{border:none;background:transparent;color:rgba(255,255,255,.78);font-weight:850;font-size:12px}.nav span{display:block;font-size:24px;margin-bottom:4px}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;padding:20px;z-index:99}.popup{background:#fffaf0;border-radius:30px;width:100%;max-width:410px;padding:28px 22px;text-align:center;box-shadow:0 24px 50px rgba(0,0,0,.34)}.popup h1{margin:8px 0;color:#4b2b10;font-size:36px}.popup p{font-size:19px;color:#4b2b10;white-space:pre-line}.popup input{width:100%;padding:17px;border:2px solid #eadcc4;border-radius:16px;font-size:23px;text-align:center;margin:16px 0}.main-btn{width:100%;border:none;border-radius:17px;padding:17px;background:linear-gradient(90deg,#704315,#b8893d);color:white;font-size:21px;font-weight:950}.ghost-btn{width:100%;border:2px solid #8b5b24;border-radius:16px;background:white;color:#5b3515;font-size:18px;font-weight:900;padding:14px;margin-top:10px}.confetti{position:fixed;top:-20px;width:10px;height:18px;z-index:120;pointer-events:none;animation:fall 1.8s linear forwards}
+
+.top-action-wrap{
+  padding:0 16px;
+  margin-top:-56px;
+  position:relative;
+  z-index:5;
+}
+.top-treasure-btn{
+  width:100%;
+  border:none;
+  border-radius:30px;
+  padding:24px 18px;
+  color:white;
+  background:
+    radial-gradient(circle at 50% 15%,rgba(255,255,255,.35),transparent 28%),
+    linear-gradient(135deg,#b9000b,#e30613 55%,#ff4b55);
+  box-shadow:0 18px 34px rgba(227,6,19,.34),0 0 0 1px rgba(255,255,255,.18) inset;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:15px;
+  text-align:left;
+  position:relative;
+  overflow:hidden;
+  animation:redPulse 2.2s ease-in-out infinite;
+}
+.top-treasure-btn:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(105deg,transparent 15%,rgba(255,255,255,.25) 45%,transparent 68%);
+  transform:translateX(-120%);
+  animation:treasureSweep 3s ease-in-out infinite;
+}
+@keyframes redPulse{
+  50%{transform:scale(1.012);box-shadow:0 22px 42px rgba(227,6,19,.44),0 0 28px rgba(227,6,19,.28)}
+}
+.top-treasure-icon{
+  width:70px;
+  height:70px;
+  border-radius:24px;
+  background:rgba(255,255,255,.18);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:43px;
+  position:relative;
+  z-index:2;
+  filter:drop-shadow(0 8px 12px rgba(0,0,0,.22));
+}
+.top-treasure-copy{
+  position:relative;
+  z-index:2;
+}
+.top-treasure-copy b{
+  display:block;
+  font-size:25px;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+  line-height:1;
+}
+.top-treasure-copy small{
+  display:block;
+  margin-top:7px;
+  font-size:15px;
+  font-weight:800;
+  opacity:.96;
+}
+.top-treasure-total{
+  margin-top:6px;
+  display:inline-block;
+  background:rgba(255,255,255,.18);
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:950;
+}
+.add-btn{display:none!important}
+.content{margin-top:14px!important}
+
+
+/* Premium Treasure Button Refresh */
+.top-treasure-btn{
+  min-height:118px;
+  border-radius:32px!important;
+  background:
+    radial-gradient(circle at 26% 18%,rgba(255,255,255,.38),transparent 23%),
+    radial-gradient(circle at 82% 78%,rgba(255,190,190,.28),transparent 30%),
+    linear-gradient(135deg,#8f0008 0%,#e30613 48%,#ff4d57 100%)!important;
+  box-shadow:
+    0 18px 34px rgba(227,6,19,.34),
+    0 0 0 1px rgba(255,255,255,.20) inset,
+    0 0 24px rgba(227,6,19,.22)!important;
+}
+.top-treasure-btn:after{
+  content:"";
+  position:absolute;
+  inset:8px;
+  border-radius:24px;
+  border:1px solid rgba(255,255,255,.16);
+  pointer-events:none;
+}
+.top-treasure-icon{
+  width:66px!important;
+  height:66px!important;
+  border-radius:24px!important;
+  background:
+    radial-gradient(circle at 35% 25%,rgba(255,255,255,.45),transparent 28%),
+    linear-gradient(135deg,rgba(255,255,255,.26),rgba(255,255,255,.08))!important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.24),
+    0 10px 18px rgba(0,0,0,.22),
+    0 0 18px rgba(255,255,255,.18);
+  animation:diamondGlow 2.8s ease-in-out infinite;
+}
+@keyframes diamondGlow{
+  50%{transform:translateY(-2px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.30),0 12px 20px rgba(0,0,0,.24),0 0 24px rgba(255,255,255,.28)}
+}
+.top-treasure-copy b{
+  font-size:24px!important;
+  letter-spacing:1.1px!important;
+  text-shadow:0 2px 8px rgba(0,0,0,.18);
+}
+.top-treasure-copy small{
+  font-size:14px!important;
+  font-weight:900!important;
+  letter-spacing:.25px;
+  text-transform:uppercase;
+}
+.top-treasure-status{
+  margin-top:7px;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  background:rgba(255,255,255,.20);
+  border:1px solid rgba(255,255,255,.18);
+  color:white;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:950;
+  letter-spacing:.2px;
+}
+.top-treasure-total{
+  position:absolute;
+  right:14px;
+  top:12px;
+  background:rgba(255,255,255,.92)!important;
+  color:#b9000b!important;
+  border:1px solid rgba(255,255,255,.7);
+  box-shadow:0 6px 14px rgba(0,0,0,.16);
+}
+.top-treasure-leader{
+  position:absolute;
+  right:14px;
+  bottom:12px;
+  background:rgba(0,0,0,.18);
+  border:1px solid rgba(255,255,255,.15);
+  color:white;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:950;
+  z-index:3;
+  max-width:145px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+
+/* Fix premium button overlap */
+.top-treasure-btn{
+  display:grid!important;
+  grid-template-columns:76px 1fr!important;
+  align-items:center!important;
+  gap:16px!important;
+  text-align:left!important;
+  padding:22px 18px!important;
+  min-height:128px!important;
+}
+.top-treasure-copy{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  justify-content:center!important;
+  min-width:0!important;
+}
+.top-treasure-copy b{
+  font-size:24px!important;
+  line-height:1.05!important;
+  margin-bottom:6px!important;
+}
+.top-treasure-copy small{
+  font-size:14px!important;
+  line-height:1.15!important;
+  margin-bottom:8px!important;
+}
+.top-treasure-status{
+  position:static!important;
+  margin-top:0!important;
+  margin-right:6px!important;
+}
+.top-treasure-total{
+  position:static!important;
+  margin-top:0!important;
+  display:inline-flex!important;
+}
+.top-treasure-leader{
+  position:static!important;
+  margin-top:7px!important;
+  max-width:100%!important;
+  display:inline-flex!important;
+}
+.top-treasure-copy .badge-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  align-items:center;
+}
+@media(max-width:390px){
+  .top-treasure-btn{
+    grid-template-columns:62px 1fr!important;
+    gap:12px!important;
+    padding:20px 14px!important;
+  }
+  .top-treasure-icon{
+    width:60px!important;
+    height:60px!important;
+    font-size:38px!important;
+  }
+  .top-treasure-copy b{
+    font-size:21px!important;
+  }
+  .top-treasure-copy small{
+    font-size:13px!important;
+  }
+}
+
+
+/* Version 4 refinements */
+.weekly-champ-card{
+  background:linear-gradient(135deg,#fff8e8,#f0d49a);
+  border:1px solid rgba(184,137,61,.25);
+}
+.weekly-champ-inner{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.weekly-cup{
+  width:56px;
+  height:56px;
+  border-radius:21px;
+  background:linear-gradient(135deg,#5b3515,#b8893d,#e2c080);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:31px;
+  box-shadow:0 10px 22px rgba(75,43,16,.22);
+}
+.weekly-champ-card strong{
+  display:block;
+  font-size:24px;
+  color:#4b2b10;
+}
+.install-card{
+  background:linear-gradient(135deg,#4b2b10,#7b4a1c);
+  color:white;
+}
+.install-card .eyebrow{color:#f4d8a2}
+.install-row{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.install-icon{
+  width:52px;
+  height:52px;
+  border-radius:18px;
+  background:rgba(255,255,255,.14);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+}
+.install-card p{
+  margin:5px 0 0;
+  opacity:.92;
+  font-size:14px;
+  line-height:1.35;
+}
+.manager-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px;
+}
+.manager-tile{
+  background:#fff7e8;
+  border-radius:16px;
+  padding:13px;
+  border:1px solid rgba(91,53,21,.09);
+}
+.manager-tile b{
+  display:block;
+  font-size:22px;
+  color:#4b2b10;
+  margin-top:4px;
+}
+
 </style>
 </head>
 <body>
 <div class="app">
 <header class="hero"><div class="hero-inner"><div class="gem">💎</div><div class="title">TREASURE</div><div class="store-pill">🏪 VALEGATE</div><br><div class="live-pill"><span class="live-dot"></span><span id="liveStatus">Connecting live data...</span></div></div></header>
+<div class="top-action-wrap">
+  <button class="top-treasure-btn" onclick="addTreasure()">
+    <div class="top-treasure-icon">💎</div>
+    <div class="top-treasure-copy">
+      <b>Treasure Found</b>
+      <small>Tap here to add a card</small>
+      <div class="badge-row">
+        <span class="top-treasure-status" id="topButtonStatus">💪 Keep Going</span>
+        <span class="top-treasure-total"><span id="topButtonTotal">0</span> / 50 today</span>
+      </div>
+      <span class="top-treasure-leader" id="topButtonLeader">👑 No leader yet</span>
+    </div>
+  </button>
+</div>
+
 <main class="content">
 <section class="card welcome"><div><div class="eyebrow">Welcome back</div><div class="name"><span id="nameText">Team</span> 👋</div></div><button class="change" onclick="openName()">Change</button></section>
-<section class="card winner-card"><div class="crown">👑</div><div><div class="eyebrow">Today's Leader</div><strong id="dailyLeader">No leader yet</strong><small id="dailyLeaderCards">Start the challenge</small></div></section>
+<section class="card winner-card"><div class="crown">👑</div><div><div class="eyebrow">Today's Leader</div><strong id="dailyLeader">No leader yet</strong><small id="dailyLeaderCards">Start the challenge</small></div></section><section class="card weekly-champ-card">
+  <div class="weekly-champ-inner">
+    <div class="weekly-cup">🏆</div>
+    <div>
+      <div class="eyebrow">Weekly Champion</div>
+      <strong id="weeklyChampion">No champion yet</strong>
+      <small id="weeklyChampionCards">This week’s top recruiter</small>
+    </div>
+  </div>
+</section>
 <section class="card"><div class="target-head"><span>Today's Store Total</span><span class="target-badge">Target 50</span></div><div class="big"><span id="todayTotal">0</span> <span>/ 50</span></div><div class="progress"><div class="bar" id="bar">0%</div></div><div class="remaining"><b id="remaining">50</b> more needed today 💎</div><div class="milestones"><div class="milestone" id="m10">10 🎉</div><div class="milestone" id="m25">25 🚀</div><div class="milestone" id="m40">40 🔥</div><div class="milestone" id="m50">50 🏆</div></div></section>
 <section class="grid"><div class="card stat-card"><div class="stat-icon">📅</div><div class="eyebrow">Week Total</div><strong id="weekTotal">0</strong></div><div class="card stat-card"><div class="stat-icon">🏆</div><div class="eyebrow">Best Today</div><strong id="bestToday">-</strong><small id="bestCards">0 cards</small></div></section>
-<button class="add-btn" onclick="addTreasure()"><div class="add-gem">💎</div><div><b>I recruited a Treasure customer</b><small>Tap once when you get a card</small></div></button>
+<section class="card">
+<div class="leader-head"><div class="eyebrow">Treasure Conversion</div><div>📊</div></div>
+<div class="eyebrow">Customers today</div>
+<input class="conv-input" id="customerInput" type="number" inputmode="numeric" placeholder="Enter footfall" oninput="saveCustomers()">
+<div class="conversion-grid">
+<div class="conv-box"><div class="eyebrow">Current</div><b id="conversionNow">-</b><small>customers per card</small></div>
+<div class="conv-box"><div class="eyebrow">Target</div><b>1 in 200</b><small>Treasure goal</small></div>
+<div class="conv-box"><div class="eyebrow">Expected</div><b id="expectedCards">0</b><small>cards needed</small></div>
+<div class="conv-box"><div class="eyebrow">Gap</div><b id="conversionGap">0</b><small>more cards</small></div>
+</div>
+<div class="conv-status" id="conversionStatus">Enter today’s customer count to calculate conversion.</div>
+</section>
+<button class="add-btn" onclick="addTreasure()"><div class="add-gem">💎</div><div><b>Treasure Found</b><small>Tap here to add a card</small></div></button>
+
+<section class="card">
+  <div class="leader-head"><div class="eyebrow">Live Activity</div><div>✨</div></div>
+  <div id="activityFeed"><p style="color:#7b684f">No activity yet today.</p></div>
+</section>
+<section class="card install-card">
+  <div class="install-row">
+    <div class="install-icon">📱</div>
+    <div>
+      <div class="eyebrow">iPhone App Icon Ready</div>
+      <strong>Add to Home Screen</strong>
+      <p>Open in Safari, tap Share, then Add to Home Screen for an app-style shortcut.</p>
+    </div>
+  </div>
+</section>
 <section class="card"><div class="leader-head"><div class="eyebrow">Today's Top Recruiters</div><div>🏅</div></div><div id="leaderboard"><p>Loading leaderboard...</p></div></section>
 </main>
 <nav class="nav"><button onclick="render()"><span>🏠</span>Home</button><button onclick="showHistory()"><span>🕘</span>History</button><button onclick="openManager()"><span>📊</span>Manager</button><button onclick="openName()"><span>👤</span>Name</button></nav>
@@ -48,7 +490,7 @@ import{getDatabase,ref,push,onValue,remove,serverTimestamp}from"https://www.gsta
 const firebaseConfig={apiKey:"AIzaSyB1mIRzjLZTE8MhH6ArcXtFxrHNsDN79SE",authDomain:"treasure-tracker-2389e.firebaseapp.com",databaseURL:"https://treasure-tracker-2389e-default-rtdb.europe-west1.firebasedatabase.app",projectId:"treasure-tracker-2389e",storageBucket:"treasure-tracker-2389e.firebasestorage.app",messagingSenderId:"551389312479",appId:"1:551389312479:web:7f69c16804fde452c0806a",measurementId:"G-JXNGBP00KR"};
 const TARGET=50,MANAGER_PIN="6530",RESET_PIN="0356";
 const app=initializeApp(firebaseConfig),db=getDatabase(app),entriesRef=ref(db,"stores/valegate/entries");
-let localName=localStorage.getItem("treasureName")||"",entries=[],lastTotalSeen=0;
+let localName=localStorage.getItem("treasureName")||"",entries=[],lastTotalSeen=0,customers=parseInt(localStorage.getItem("treasureCustomers")||"0",10)||0;
 function todayKey(){return new Date().toISOString().slice(0,10)}
 function weekKey(dateString){const d=new Date(dateString+"T00:00:00"),onejan=new Date(d.getFullYear(),0,1);return d.getFullYear()+"-W"+Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7)}
 function thisWeekKey(){return weekKey(todayKey())}
@@ -56,11 +498,54 @@ window.openName=function(){document.getElementById("nameInput").value=localName;
 window.saveName=function(){const n=document.getElementById("nameInput").value.trim();if(!n){alert("Please type your name first.");return}localName=n;localStorage.setItem("treasureName",n);document.getElementById("nameOverlay").style.display="none";render()}
 window.addTreasure=function(){if(!localName){openName();return}push(entriesRef,{store:"Valegate",name:localName,date:todayKey(),week:thisWeekKey(),time:new Date().toISOString(),createdAt:serverTimestamp()}).then(()=>{confetti();document.getElementById("successName").textContent=localName;document.getElementById("successTitle").textContent="Nice One!";document.getElementById("successOverlay").style.display="flex"}).catch(err=>alert("Could not save card: "+err.message))}
 window.closeSuccess=function(){document.getElementById("successOverlay").style.display="none"}
-window.render=render;
+window.render=render;window.saveCustomers=function(){customers=parseInt(document.getElementById("customerInput").value||"0",10)||0;localStorage.setItem("treasureCustomers",customers);render()}
 function todayEntries(){return entries.filter(e=>e.date===todayKey())}
 function weekEntries(){return entries.filter(e=>e.week===thisWeekKey())}
 function todayCounts(){const counts={};todayEntries().forEach(e=>counts[e.name]=(counts[e.name]||0)+1);return counts}
-function render(){document.getElementById("nameText").textContent=localName||"Team";const total=todayEntries().length,pct=Math.min(100,Math.round((total/TARGET)*100));document.getElementById("todayTotal").textContent=total;document.getElementById("weekTotal").textContent=weekEntries().length;document.getElementById("remaining").textContent=Math.max(0,TARGET-total);document.getElementById("bar").style.width=Math.max(8,pct)+"%";document.getElementById("bar").textContent=pct+"%";document.getElementById("successTotal").textContent=total;["m10","m25","m40","m50"].forEach(id=>document.getElementById(id).classList.remove("hit"));if(total>=10)document.getElementById("m10").classList.add("hit");if(total>=25)document.getElementById("m25").classList.add("hit");if(total>=40)document.getElementById("m40").classList.add("hit");if(total>=50)document.getElementById("m50").classList.add("hit");const list=Object.entries(todayCounts()).sort((a,b)=>b[1]-a[1]);document.getElementById("bestToday").textContent=list.length?list[0][0]:"-";document.getElementById("bestCards").textContent=list.length?list[0][1]+" cards":"0 cards";document.getElementById("dailyLeader").textContent=list.length?list[0][0]:"No leader yet";document.getElementById("dailyLeaderCards").textContent=list.length?list[0][1]+" Treasure cards today":"Start the challenge";const lb=document.getElementById("leaderboard");lb.innerHTML="";if(!list.length){lb.innerHTML="<p style='color:#7b684f'>No Treasure cards logged yet today.</p>";return}list.forEach((item,index)=>{const row=document.createElement("div");row.className="row"+(item[0]===localName?" you":"");const medal=index===0?"🥇":index===1?"🥈":index===2?"🥉":index+1;row.innerHTML='<div class="medal">'+medal+'</div><div>'+item[0]+(item[0]===localName?' (You)':'')+'</div><div class="score">'+item[1]+'</div>';lb.appendChild(row)})}
+function weekCounts(){const counts={};weekEntries().forEach(e=>counts[e.name]=(counts[e.name]||0)+1);return counts}
+function render(){document.getElementById("nameText").textContent=localName||"Team";const total=todayEntries().length,pct=Math.min(100,Math.round((total/TARGET)*100));document.getElementById("todayTotal").textContent=total;if(document.getElementById("topButtonTotal"))document.getElementById("topButtonTotal").textContent=total;
+  if(document.getElementById("topButtonStatus")){
+    document.getElementById("topButtonStatus").textContent = total>=50 ? "🏆 Target Achieved" : total>=40 ? "🔥 Almost There" : total>=25 ? "🚀 Great Pace" : total>=10 ? "✨ Momentum Building" : "💪 Keep Going";
+  }document.getElementById("weekTotal").textContent=weekEntries().length;document.getElementById("remaining").textContent=Math.max(0,TARGET-total);document.getElementById("bar").style.width=Math.max(8,pct)+"%";document.getElementById("bar").textContent=pct+"%";document.getElementById("successTotal").textContent=total;["m10","m25","m40","m50"].forEach(id=>document.getElementById(id).classList.remove("hit"));if(total>=10)document.getElementById("m10").classList.add("hit");if(total>=25)document.getElementById("m25").classList.add("hit");if(total>=40)document.getElementById("m40").classList.add("hit");if(total>=50)document.getElementById("m50").classList.add("hit");if(document.getElementById("customerInput"))document.getElementById("customerInput").value=customers||"";
+const expected=customers?Math.ceil(customers/200):0;
+const gap=Math.max(0,expected-total);
+const conv=total>0&&customers?Math.round(customers/total):0;
+document.getElementById("expectedCards").textContent=expected;
+document.getElementById("conversionGap").textContent=gap;
+document.getElementById("conversionNow").textContent=conv?("1 in "+conv):"-";
+document.getElementById("conversionStatus").textContent=!customers?"Enter today’s customer count to calculate conversion.":total>=expected?"On target — great Treasure conversion today.":("Need "+gap+" more card"+(gap===1?"":"s")+" to hit 1 in 200.");
+const list=Object.entries(todayCounts()).sort((a,b)=>b[1]-a[1]);document.getElementById("bestToday").textContent=list.length?list[0][0]:"-";document.getElementById("bestCards").textContent=list.length?list[0][1]+" cards":"0 cards";document.getElementById("dailyLeader").textContent=list.length?list[0][0]:"No leader yet";document.getElementById("dailyLeaderCards").textContent=list.length?list[0][1]+" Treasure cards today":"Start the challenge";if(document.getElementById("topButtonLeader"))document.getElementById("topButtonLeader").textContent=list.length?("👑 "+list[0][0]+" leading"):"👑 No leader yet";
+  const wList=Object.entries(weekCounts()).sort((a,b)=>b[1]-a[1]);
+  if(document.getElementById("weeklyChampion")){
+    document.getElementById("weeklyChampion").textContent=wList.length?wList[0][0]:"No champion yet";
+    document.getElementById("weeklyChampionCards").textContent=wList.length?wList[0][1]+" cards this week":"This week’s top recruiter";
+  }const lb=document.getElementById("leaderboard");lb.innerHTML="";if(!list.length){lb.innerHTML="<p style='color:#7b684f'>No Treasure cards logged yet today.</p>";renderActivity();return}list.forEach((item,index)=>{const row=document.createElement("div");row.className="row"+(item[0]===localName?" you":"");const medal=index===0?"🥇":index===1?"🥈":index===2?"🥉":index+1;row.innerHTML='<div class="medal">'+medal+'</div><div>'+item[0]+(item[0]===localName?' (You)':'')+'</div><div class="score">'+item[1]+'</div>';lb.appendChild(row)});renderActivity()}
+function timeAgo(iso){
+  const diff=Math.max(0,Date.now()-new Date(iso).getTime());
+  const mins=Math.floor(diff/60000);
+  if(mins<1)return "Just now";
+  if(mins===1)return "1 min ago";
+  if(mins<60)return mins+" mins ago";
+  const hrs=Math.floor(mins/60);
+  if(hrs===1)return "1 hour ago";
+  return hrs+" hours ago";
+}
+function renderActivity(){
+  const feed=document.getElementById("activityFeed");
+  if(!feed)return;
+  const recent=todayEntries().slice(-5).reverse();
+  feed.innerHTML="";
+  if(!recent.length){
+    feed.innerHTML="<p style='color:#7b684f'>No activity yet today.</p>";
+    return;
+  }
+  recent.forEach(e=>{
+    const row=document.createElement("div");
+    row.className="activity-row";
+    row.innerHTML='<div class="activity-icon">💎</div><div><div class="activity-main">'+e.name+' added a Treasure card</div><div class="activity-time">'+timeAgo(e.time)+'</div></div>';
+    feed.appendChild(row);
+  });
+}
 window.showHistory=function(){const recent=entries.slice(-10).reverse();alert(recent.length?recent.map(e=>new Date(e.time).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+" - "+e.name).join("\n"):"No history yet.")}
 window.openManager=function(){const pin=prompt("Manager access code:");if(pin!==MANAGER_PIN){alert("Incorrect manager code.");return}const list=Object.entries(todayCounts()).sort((a,b)=>b[1]-a[1]),todayTotal=todayEntries().length,pct=Math.round((todayTotal/TARGET)*100);const lines=["VALEGATE TREASURE UPDATE","","Today's Total: "+todayTotal+" / "+TARGET,"Achievement: "+pct+"%","Remaining: "+Math.max(0,TARGET-todayTotal),"Week Total: "+weekEntries().length,"","Today's Leader:",list.length?list[0][0]+" - "+list[0][1]:"No cards logged yet","","Leaderboard:",...(list.length?list.map((x,i)=>(i+1)+". "+x[0]+" - "+x[1]):["No cards logged yet."])];document.getElementById("managerText").innerText=lines.join("\n");document.getElementById("managerOverlay").style.display="flex"}
 window.closeManager=function(){document.getElementById("managerOverlay").style.display="none"}
