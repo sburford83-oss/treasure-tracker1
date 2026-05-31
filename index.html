@@ -1,42 +1,75 @@
-💎
-TREASURE
-🏪 VALEGATE
-
-Connecting live data...
-WELCOME BACK
-Team 👋
-Change
-👑
-TODAY'S LEADER
-No leader yet
-Start the challenge
-TODAY'S STORE TOTAL
-TARGET 50
-0 / 50
-0%
-50 more needed today 💎
-10 🎉
-25 🚀
-40 🔥
-50 🏆
-📅
-WEEK TOTAL
-0
-🏆
-BEST TODAY
--
-0 cards
-💎
-I recruited a Treasure customer
-Tap once when you get a card
-TODAY'S TOP RECRUITERS
-🏅
-Loading leaderboard...
-🏠
-Home
-🕘
-History
-📊
-Manager
-👤
-Name
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valegate Treasure Tracker</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:#1f1106;color:#2d1b0d}
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:radial-gradient(circle at 85% 6%,rgba(226,192,128,.35),transparent 28%),linear-gradient(180deg,#2d1808 0%,#6d441d 24%,#fff3df 47%,#fffaf2 100%);padding-bottom:96px;overflow:hidden}
+.hero{color:white;text-align:center;padding:34px 18px 82px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:-120px -80px auto -80px;height:330px;background:conic-gradient(from 90deg,rgba(255,255,255,.05),rgba(226,192,128,.35),rgba(255,255,255,.05),rgba(184,137,61,.22),rgba(255,255,255,.05));animation:spin 10s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}@keyframes pulseDot{70%{box-shadow:0 0 0 9px rgba(50,213,131,0)}100%{box-shadow:0 0 0 0 rgba(50,213,131,0)}}@keyframes softPulse{50%{transform:scale(1.012);box-shadow:0 18px 34px rgba(75,43,16,.36)}}@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.85}}
+.hero-inner{position:relative;z-index:2}.gem{font-size:56px;filter:drop-shadow(0 10px 16px rgba(0,0,0,.35));animation:float 2.8s ease-in-out infinite}.title{font-size:43px;font-weight:950;letter-spacing:5px;margin:8px 0;text-shadow:0 8px 22px rgba(0,0,0,.3)}
+.store-pill{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);padding:9px 15px;border-radius:999px;font-size:13px;font-weight:900;letter-spacing:.7px}.live-pill{display:inline-flex;align-items:center;gap:7px;margin-top:12px;background:rgba(255,248,236,.94);color:#4b2b10;border-radius:999px;padding:8px 13px;font-size:12px;font-weight:900}.live-dot{width:9px;height:9px;border-radius:50%;background:#32d583;box-shadow:0 0 0 0 rgba(50,213,131,.7);animation:pulseDot 1.6s infinite}
+.content{padding:0 16px 22px;margin-top:-58px;position:relative;z-index:3}.card{background:rgba(255,253,247,.97);border:1px solid rgba(91,53,21,.10);border-radius:24px;padding:19px;margin-bottom:14px;box-shadow:0 14px 34px rgba(59,34,14,.14)}
+.welcome{display:flex;justify-content:space-between;gap:14px;align-items:center}.eyebrow{color:#7b684f;font-weight:850;font-size:12px;text-transform:uppercase;letter-spacing:.55px}.name{font-size:34px;font-weight:950;margin-top:2px}.change{border:1px solid rgba(91,53,21,.3);background:#fff9ef;border-radius:15px;padding:11px 12px;color:#5b3515;font-weight:900;white-space:nowrap}
+.winner-card{background:linear-gradient(135deg,#fff9ec,#f2d9a8);display:flex;align-items:center;gap:14px}.crown{width:54px;height:54px;border-radius:20px;background:linear-gradient(135deg,#8f642c,#d8b676);color:white;display:flex;align-items:center;justify-content:center;font-size:30px}.winner-card strong{display:block;font-size:24px;color:#4b2b10}
+.target-head{display:flex;justify-content:space-between;align-items:center;color:#5b3515;font-weight:950;text-transform:uppercase}.target-badge{background:#f0dfbf;border-radius:999px;padding:7px 11px;font-size:12px}.big{text-align:center;font-size:78px;font-weight:950;line-height:1;margin:18px 0 15px;color:#4b2b10}.big span:last-child{font-size:42px;color:#857663}
+.progress{height:42px;background:#ecddc4;border-radius:999px;overflow:hidden}.bar{height:100%;width:8%;background:linear-gradient(90deg,#704315,#b8893d,#e2c080);display:flex;justify-content:flex-end;align-items:center;padding-right:13px;color:white;font-weight:950;border-radius:999px;transition:.55s}.remaining{margin-top:14px;text-align:center;color:#4b2b10;font-size:16px;font-weight:750}
+.milestones{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:14px}.milestone{text-align:center;background:#f0dfbf;border-radius:14px;padding:9px 4px;font-size:12px;font-weight:900;color:#6b451c;opacity:.65}.milestone.hit{opacity:1;background:linear-gradient(135deg,#b8893d,#e2c080);color:white}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat-card{min-height:116px}.stat-card strong{display:block;font-size:31px;color:#4b2b10;margin-top:7px}.stat-icon{width:44px;height:44px;border-radius:16px;background:linear-gradient(135deg,#f4e1bd,#fff8ed);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:10px}
+.add-btn{width:100%;border:none;border-radius:26px;padding:20px;margin:3px 0 14px;color:white;background:linear-gradient(135deg,#4b2b10,#8d5f2a 55%,#d6ad6a);box-shadow:0 16px 30px rgba(75,43,16,.30);display:flex;align-items:center;gap:14px;text-align:left;animation:softPulse 2.4s ease-in-out infinite}.add-gem{width:56px;height:56px;border-radius:20px;background:rgba(255,255,255,.17);display:flex;align-items:center;justify-content:center;font-size:32px}.add-btn b{display:block;font-size:19px}.add-btn small{display:block;font-size:14px;font-weight:500;opacity:.92;margin-top:5px}
+.leader-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.row{display:flex;align-items:center;gap:12px;padding:12px 6px;margin-bottom:7px;border-radius:16px;background:linear-gradient(90deg,#fffaf0,#fffdf8);border:1px solid rgba(91,53,21,.07);font-size:18px;font-weight:850}.row.you{background:linear-gradient(90deg,#f1d8a8,#fff7e8);box-shadow:0 8px 20px rgba(184,137,61,.18)}.medal{width:38px;height:38px;border-radius:15px;background:linear-gradient(135deg,#8f642c,#d8b676);color:white;display:flex;align-items:center;justify-content:center;font-weight:950}.score{margin-left:auto;font-size:22px;font-weight:950}
+.nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:100%;max-width:480px;height:82px;background:rgba(45,24,8,.96);display:grid;grid-template-columns:repeat(4,1fr);z-index:20}.nav button{border:none;background:transparent;color:rgba(255,255,255,.78);font-weight:850;font-size:12px}.nav span{display:block;font-size:24px;margin-bottom:4px}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;padding:20px;z-index:99}.popup{background:#fffaf0;border-radius:30px;width:100%;max-width:410px;padding:28px 22px;text-align:center;box-shadow:0 24px 50px rgba(0,0,0,.34)}.popup h1{margin:8px 0;color:#4b2b10;font-size:36px}.popup p{font-size:19px;color:#4b2b10;white-space:pre-line}.popup input{width:100%;padding:17px;border:2px solid #eadcc4;border-radius:16px;font-size:23px;text-align:center;margin:16px 0}.main-btn{width:100%;border:none;border-radius:17px;padding:17px;background:linear-gradient(90deg,#704315,#b8893d);color:white;font-size:21px;font-weight:950}.ghost-btn{width:100%;border:2px solid #8b5b24;border-radius:16px;background:white;color:#5b3515;font-size:18px;font-weight:900;padding:14px;margin-top:10px}.confetti{position:fixed;top:-20px;width:10px;height:18px;z-index:120;pointer-events:none;animation:fall 1.8s linear forwards}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hero"><div class="hero-inner"><div class="gem">💎</div><div class="title">TREASURE</div><div class="store-pill">🏪 VALEGATE</div><br><div class="live-pill"><span class="live-dot"></span><span id="liveStatus">Connecting live data...</span></div></div></header>
+<main class="content">
+<section class="card welcome"><div><div class="eyebrow">Welcome back</div><div class="name"><span id="nameText">Team</span> 👋</div></div><button class="change" onclick="openName()">Change</button></section>
+<section class="card winner-card"><div class="crown">👑</div><div><div class="eyebrow">Today's Leader</div><strong id="dailyLeader">No leader yet</strong><small id="dailyLeaderCards">Start the challenge</small></div></section>
+<section class="card"><div class="target-head"><span>Today's Store Total</span><span class="target-badge">Target 50</span></div><div class="big"><span id="todayTotal">0</span> <span>/ 50</span></div><div class="progress"><div class="bar" id="bar">0%</div></div><div class="remaining"><b id="remaining">50</b> more needed today 💎</div><div class="milestones"><div class="milestone" id="m10">10 🎉</div><div class="milestone" id="m25">25 🚀</div><div class="milestone" id="m40">40 🔥</div><div class="milestone" id="m50">50 🏆</div></div></section>
+<section class="grid"><div class="card stat-card"><div class="stat-icon">📅</div><div class="eyebrow">Week Total</div><strong id="weekTotal">0</strong></div><div class="card stat-card"><div class="stat-icon">🏆</div><div class="eyebrow">Best Today</div><strong id="bestToday">-</strong><small id="bestCards">0 cards</small></div></section>
+<button class="add-btn" onclick="addTreasure()"><div class="add-gem">💎</div><div><b>I recruited a Treasure customer</b><small>Tap once when you get a card</small></div></button>
+<section class="card"><div class="leader-head"><div class="eyebrow">Today's Top Recruiters</div><div>🏅</div></div><div id="leaderboard"><p>Loading leaderboard...</p></div></section>
+</main>
+<nav class="nav"><button onclick="render()"><span>🏠</span>Home</button><button onclick="showHistory()"><span>🕘</span>History</button><button onclick="openManager()"><span>📊</span>Manager</button><button onclick="openName()"><span>👤</span>Name</button></nav>
+</div>
+<div class="overlay" id="nameOverlay"><div class="popup"><div class="gem">💎</div><h1>Your Name</h1><p>Enter your name once. Every card after that is one tap.</p><input id="nameInput" placeholder="Type your name"><button class="main-btn" onclick="saveName()">Save Name</button></div></div>
+<div class="overlay" id="successOverlay"><div class="popup"><div class="gem">💎</div><h1 id="successTitle">Nice One!</h1><p><b id="successName">You</b>, you've recruited a Treasure customer.</p><div class="big" style="font-size:52px;margin:10px 0">+1</div><p>Today's Store Total</p><div class="big" style="font-size:52px"><span id="successTotal">0</span> <span>/ 50</span></div><button class="main-btn" onclick="closeSuccess()">Awesome</button></div></div>
+<div class="overlay" id="managerOverlay"><div class="popup"><h1>Manager View</h1><p id="managerText">Loading...</p><button class="ghost-btn" onclick="copySummary()">Copy Daily Summary</button><button class="ghost-btn" onclick="resetToday()">Reset Today</button><button class="main-btn" onclick="closeManager()">Close</button></div></div>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import{getDatabase,ref,push,onValue,remove,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
+const firebaseConfig={apiKey:"AIzaSyB1mIRzjLZTE8MhH6ArcXtFxrHNsDN79SE",authDomain:"treasure-tracker-2389e.firebaseapp.com",databaseURL:"https://treasure-tracker-2389e-default-rtdb.europe-west1.firebasedatabase.app",projectId:"treasure-tracker-2389e",storageBucket:"treasure-tracker-2389e.firebasestorage.app",messagingSenderId:"551389312479",appId:"1:551389312479:web:7f69c16804fde452c0806a",measurementId:"G-JXNGBP00KR"};
+const TARGET=50,MANAGER_PIN="6530",RESET_PIN="0356";
+const app=initializeApp(firebaseConfig),db=getDatabase(app),entriesRef=ref(db,"stores/valegate/entries");
+let localName=localStorage.getItem("treasureName")||"",entries=[],lastTotalSeen=0;
+function todayKey(){return new Date().toISOString().slice(0,10)}
+function weekKey(dateString){const d=new Date(dateString+"T00:00:00"),onejan=new Date(d.getFullYear(),0,1);return d.getFullYear()+"-W"+Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7)}
+function thisWeekKey(){return weekKey(todayKey())}
+window.openName=function(){document.getElementById("nameInput").value=localName;document.getElementById("nameOverlay").style.display="flex"}
+window.saveName=function(){const n=document.getElementById("nameInput").value.trim();if(!n){alert("Please type your name first.");return}localName=n;localStorage.setItem("treasureName",n);document.getElementById("nameOverlay").style.display="none";render()}
+window.addTreasure=function(){if(!localName){openName();return}push(entriesRef,{store:"Valegate",name:localName,date:todayKey(),week:thisWeekKey(),time:new Date().toISOString(),createdAt:serverTimestamp()}).then(()=>{confetti();document.getElementById("successName").textContent=localName;document.getElementById("successTitle").textContent="Nice One!";document.getElementById("successOverlay").style.display="flex"}).catch(err=>alert("Could not save card: "+err.message))}
+window.closeSuccess=function(){document.getElementById("successOverlay").style.display="none"}
+window.render=render;
+function todayEntries(){return entries.filter(e=>e.date===todayKey())}
+function weekEntries(){return entries.filter(e=>e.week===thisWeekKey())}
+function todayCounts(){const counts={};todayEntries().forEach(e=>counts[e.name]=(counts[e.name]||0)+1);return counts}
+function render(){document.getElementById("nameText").textContent=localName||"Team";const total=todayEntries().length,pct=Math.min(100,Math.round((total/TARGET)*100));document.getElementById("todayTotal").textContent=total;document.getElementById("weekTotal").textContent=weekEntries().length;document.getElementById("remaining").textContent=Math.max(0,TARGET-total);document.getElementById("bar").style.width=Math.max(8,pct)+"%";document.getElementById("bar").textContent=pct+"%";document.getElementById("successTotal").textContent=total;["m10","m25","m40","m50"].forEach(id=>document.getElementById(id).classList.remove("hit"));if(total>=10)document.getElementById("m10").classList.add("hit");if(total>=25)document.getElementById("m25").classList.add("hit");if(total>=40)document.getElementById("m40").classList.add("hit");if(total>=50)document.getElementById("m50").classList.add("hit");const list=Object.entries(todayCounts()).sort((a,b)=>b[1]-a[1]);document.getElementById("bestToday").textContent=list.length?list[0][0]:"-";document.getElementById("bestCards").textContent=list.length?list[0][1]+" cards":"0 cards";document.getElementById("dailyLeader").textContent=list.length?list[0][0]:"No leader yet";document.getElementById("dailyLeaderCards").textContent=list.length?list[0][1]+" Treasure cards today":"Start the challenge";const lb=document.getElementById("leaderboard");lb.innerHTML="";if(!list.length){lb.innerHTML="<p style='color:#7b684f'>No Treasure cards logged yet today.</p>";return}list.forEach((item,index)=>{const row=document.createElement("div");row.className="row"+(item[0]===localName?" you":"");const medal=index===0?"🥇":index===1?"🥈":index===2?"🥉":index+1;row.innerHTML='<div class="medal">'+medal+'</div><div>'+item[0]+(item[0]===localName?' (You)':'')+'</div><div class="score">'+item[1]+'</div>';lb.appendChild(row)})}
+window.showHistory=function(){const recent=entries.slice(-10).reverse();alert(recent.length?recent.map(e=>new Date(e.time).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+" - "+e.name).join("\n"):"No history yet.")}
+window.openManager=function(){const pin=prompt("Manager access code:");if(pin!==MANAGER_PIN){alert("Incorrect manager code.");return}const list=Object.entries(todayCounts()).sort((a,b)=>b[1]-a[1]),todayTotal=todayEntries().length,pct=Math.round((todayTotal/TARGET)*100);const lines=["VALEGATE TREASURE UPDATE","","Today's Total: "+todayTotal+" / "+TARGET,"Achievement: "+pct+"%","Remaining: "+Math.max(0,TARGET-todayTotal),"Week Total: "+weekEntries().length,"","Today's Leader:",list.length?list[0][0]+" - "+list[0][1]:"No cards logged yet","","Leaderboard:",...(list.length?list.map((x,i)=>(i+1)+". "+x[0]+" - "+x[1]):["No cards logged yet."])];document.getElementById("managerText").innerText=lines.join("\n");document.getElementById("managerOverlay").style.display="flex"}
+window.closeManager=function(){document.getElementById("managerOverlay").style.display="none"}
+window.copySummary=function(){navigator.clipboard.writeText(document.getElementById("managerText").innerText).then(()=>alert("Daily summary copied."))}
+window.resetToday=function(){const pin=prompt("Reset code:");if(pin!==RESET_PIN){alert("Incorrect reset code.");return}if(confirm("Reset today's Valegate entries?")){Promise.all(todayEntries().map(e=>remove(ref(db,"stores/valegate/entries/"+e.id)))).then(()=>alert("Today reset."))}}
+function confetti(){const colors=["#e30613","#b8893d","#fff1c9","#5f8f3a","#f46b36"];for(let i=0;i<85;i++){const c=document.createElement("div");c.className="confetti";c.style.left=Math.random()*100+"vw";c.style.background=colors[Math.floor(Math.random()*colors.length)];c.style.animationDelay=Math.random()*0.6+"s";document.body.appendChild(c);setTimeout(()=>c.remove(),2500)}}
+function milestoneCheck(newTotal){if(newTotal>lastTotalSeen&&[10,25,40,50].includes(newTotal)){document.getElementById("successTitle").textContent=newTotal===50?"Target Achieved!":newTotal===40?"Almost There!":newTotal===25?"Halfway Push!":"Great Start!";document.getElementById("successName").textContent="Valegate";document.getElementById("successOverlay").style.display="flex";confetti()}lastTotalSeen=newTotal}
+onValue(entriesRef,snapshot=>{const val=snapshot.val()||{};entries=Object.entries(val).map(([id,data])=>({id,...data}));document.getElementById("liveStatus").textContent="Live data connected";const currentTotal=todayEntries().length;render();milestoneCheck(currentTotal)},error=>{document.getElementById("liveStatus").textContent="Live data error";alert("Firebase error: "+error.message)})
+setTimeout(()=>{if(!localName)openName()},500)
+</script>
+</body>
+</html>
