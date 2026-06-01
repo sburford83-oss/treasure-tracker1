@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="theme-color" content="#c62828">
-
-<link rel="manifest" href="manifest.json">
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Treasure Tracker">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-
-<link rel="apple-touch-icon" href="icon-192.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -492,7 +483,7 @@ display:flex;align-items:center;justify-content:center;flex:0 0 auto;
 </div>
 <div class="overlay" id="nameOverlay"><div class="popup"><div class="gem">💎</div><h1>Your Name</h1><p>Enter your name once. Every card after that is one tap.</p><input id="nameInput" placeholder="Type your name"><button class="main-btn" onclick="saveName()">Save Name</button></div></div>
 <div class="overlay" id="successOverlay"><div class="popup"><div class="gem">💎</div><h1 id="successTitle">Nice One!</h1><p><b id="successName">You</b>, you've recruited a Treasure customer.</p><div class="big" style="font-size:52px;margin:10px 0">+1</div><p>Today's Store Total</p><div class="big" style="font-size:52px"><span id="successTotal">0</span> <span>/ 50</span></div><button class="main-btn" onclick="closeSuccess()">Awesome</button></div></div>
-<div class="overlay" id="managerOverlay"><div class="popup"><h1>Manager View</h1><p id="managerText">Loading...</p><button class="ghost-btn" onclick="copySummary()">Copy Daily Summary</button><button class="ghost-btn" onclick="resetToday()">Reset Today</button><button class="main-btn" onclick="closeManager()">Close</button></div></div>
+<div class="overlay" id="managerOverlay"><div class="popup"><h1>Manager View</h1><p id="managerText">Loading...</p><button class="ghost-btn" onclick="copySummary()">Copy Daily Summary</button><button class="ghost-btn" onclick="resetToday()">Reset Today</button><button class="ghost-btn" onclick="resetAllTotals()">Reset All Totals</button><button class="main-btn" onclick="closeManager()">Close</button></div></div>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import{getDatabase,ref,push,onValue,remove,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
@@ -560,6 +551,7 @@ window.openManager=function(){const pin=prompt("Manager access code:");if(pin!==
 window.closeManager=function(){document.getElementById("managerOverlay").style.display="none"}
 window.copySummary=function(){navigator.clipboard.writeText(document.getElementById("managerText").innerText).then(()=>alert("Daily summary copied."))}
 window.resetToday=function(){const pin=prompt("Reset code:");if(pin!==RESET_PIN){alert("Incorrect reset code.");return}if(confirm("Reset today's Valegate entries?")){Promise.all(todayEntries().map(e=>remove(ref(db,"stores/valegate/entries/"+e.id)))).then(()=>alert("Today reset."))}}
+window.resetAllTotals=function(){const pin=prompt("Reset ALL totals code:");if(pin!==RESET_PIN){alert("Incorrect reset code.");return}const confirmText=prompt("Type RESET ALL to clear every Treasure entry:");if(confirmText!=="RESET ALL"){alert("Reset cancelled.");return}remove(entriesRef).then(()=>alert("All Treasure totals have been reset.")).catch(err=>alert("Could not reset all totals: "+err.message))}
 function confetti(){const colors=["#e30613","#b8893d","#fff1c9","#5f8f3a","#f46b36"];for(let i=0;i<85;i++){const c=document.createElement("div");c.className="confetti";c.style.left=Math.random()*100+"vw";c.style.background=colors[Math.floor(Math.random()*colors.length)];c.style.animationDelay=Math.random()*0.6+"s";document.body.appendChild(c);setTimeout(()=>c.remove(),2500)}}
 function milestoneCheck(newTotal){if(newTotal>lastTotalSeen&&[10,25,40,50].includes(newTotal)){document.getElementById("successTitle").textContent=newTotal===50?"Target Achieved!":newTotal===40?"Almost There!":newTotal===25?"Halfway Push!":"Great Start!";document.getElementById("successName").textContent="Valegate";document.getElementById("successOverlay").style.display="flex";confetti()}lastTotalSeen=newTotal}
 onValue(entriesRef,snapshot=>{const val=snapshot.val()||{};entries=Object.entries(val).map(([id,data])=>({id,...data}));document.getElementById("liveStatus").textContent="Live data connected";const currentTotal=todayEntries().length;render();milestoneCheck(currentTotal)},error=>{document.getElementById("liveStatus").textContent="Live data error";alert("Firebase error: "+error.message)})
