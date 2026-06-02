@@ -734,10 +734,10 @@ function render(){document.getElementById("nameText").textContent=localName||"Te
 const expected=customers?Math.ceil(customers/200):0;
 const gap=Math.max(0,expected-total);
 const conv=total>0&&customers?Math.round(customers/total):0;
-document.getElementById("expectedCards").textContent=expected;
-document.getElementById("conversionGap").textContent=gap;
-document.getElementById("conversionNow").textContent=conv?("1 in "+conv):"-";
-document.getElementById("conversionStatus").textContent=!customers?"Enter today’s customer count to calculate conversion.":total>=expected?"On target — great Treasure conversion today.":("Need "+gap+" more card"+(gap===1?"":"s")+" to hit 1 in 200.");
+if(document.getElementById("expectedCards"))document.getElementById("expectedCards").textContent=expected;
+if(document.getElementById("conversionGap"))document.getElementById("conversionGap").textContent=gap;
+if(document.getElementById("conversionNow"))document.getElementById("conversionNow").textContent=conv?("1 in "+conv):"-";
+if(document.getElementById("conversionStatus"))document.getElementById("conversionStatus").textContent=!customers?"Enter today’s customer count to calculate conversion.":total>=expected?"On target — great Treasure conversion today.":("Need "+gap+" more card"+(gap===1?"":"s")+" to hit 1 in 200.");
   if(document.getElementById("managerCustomerInput"))document.getElementById("managerCustomerInput").value=customers||"";
   if(document.getElementById("managerExpectedCards"))document.getElementById("managerExpectedCards").textContent=expected;
   if(document.getElementById("managerConversionGap"))document.getElementById("managerConversionGap").textContent=gap;
