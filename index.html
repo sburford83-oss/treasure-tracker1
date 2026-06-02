@@ -643,6 +643,26 @@ body.show-conversion #conversionPage{display:block!important}
 body:not(.show-conversion) #conversionPage{display:none!important}
 body.show-conversion .hero{padding-bottom:82px}
 
+
+/* Manager Page */
+.manager-page{padding:0 16px 110px;margin-top:-58px;position:relative;z-index:3}
+body.show-manager main.content{display:none}
+body.show-manager .option-c-wrap{display:none!important}
+body.show-manager #conversionPage{display:none!important}
+body.show-manager #managerPage{display:block!important}
+body:not(.show-manager) #managerPage{display:none!important}
+body.show-manager .hero{padding-bottom:82px}
+.manager-action-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px}
+.manager-action{width:100%;border:none;border-radius:18px;padding:16px;text-align:left;font-size:18px;font-weight:950;background:#fff7e8;color:#4b2b10;border:1px solid rgba(91,53,21,.12);box-shadow:0 8px 18px rgba(59,34,14,.08)}
+.manager-action span{display:block;font-size:13px;font-weight:750;color:#7b684f;margin-top:4px}
+.manager-action.danger{background:linear-gradient(135deg,#fff0f0,#ffe4e4);color:#9b0009;border-color:rgba(227,6,19,.20)}
+.manager-action.primary{background:linear-gradient(135deg,#4b2b10,#8d5f2a);color:white}
+.manager-action.primary span{color:rgba(255,255,255,.82)}
+.manager-summary-box{white-space:pre-line;background:#fff7e8;border-radius:18px;padding:15px;margin-top:12px;text-align:left;color:#4b2b10;font-weight:750;border:1px solid rgba(91,53,21,.10)}
+.last-card-box{background:#fffaf2;border:1px solid rgba(91,53,21,.10);border-radius:18px;padding:14px;margin-top:12px;text-align:left}
+.last-card-box b{display:block;font-size:18px;color:#4b2b10}
+.last-card-box small{color:#7b684f}
+
 </style>
 </head>
 <body>
@@ -708,7 +728,32 @@ body.show-conversion .hero{padding-bottom:82px}
   </section>
 </section>
 
-<nav class="nav"><button onclick="showHome()"><span>🏠</span>Home</button><button onclick="showConversion()"><span>🗣️</span>Conversion</button><button onclick="openManager()"><span>📊</span>Manager</button><button onclick="openName()"><span>👤</span>Name</button></nav>
+
+<section class="page manager-page" id="managerPage" style="display:none">
+  <section class="card">
+    <div class="leader-head"><div class="eyebrow">Manager Dashboard</div><div>📊</div></div>
+    <div class="manager-summary-box" id="managerPageText">Loading manager summary...</div>
+  </section>
+
+  <section class="card">
+    <div class="leader-head"><div class="eyebrow">Last Treasure Entry</div><div>↩️</div></div>
+    <div class="last-card-box" id="lastTreasureBox">No entries yet today.</div>
+    <div class="manager-action-grid">
+      <button class="manager-action danger" onclick="deleteLastTreasure()">Delete Last Treasure Card<span>Use this if someone double-pressed by mistake.</span></button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="leader-head"><div class="eyebrow">Manager Options</div><div>⚙️</div></div>
+    <div class="manager-action-grid">
+      <button class="manager-action primary" onclick="copySummary()">Copy Daily Summary<span>Copies today’s update, leaderboard and conversion.</span></button>
+      <button class="manager-action" onclick="resetToday()">Reset Today<span>Clears only today’s Treasure entries. Code required.</span></button>
+      <button class="manager-action danger" onclick="resetAllTotals()">Reset All Totals<span>Clears every saved Treasure entry. Code and confirmation required.</span></button>
+    </div>
+  </section>
+</section>
+
+<nav class="nav"><button onclick="showHome()"><span>🏠</span>Home</button><button onclick="showConversion()"><span>🗣️</span>Conversion</button><button onclick="showManagerPage()"><span>📊</span>Manager</button><button onclick="openName()"><span>👤</span>Name</button></nav>
 </div>
 <div class="overlay" id="nameOverlay"><div class="popup"><div class="gem">💎</div><h1>Your Name</h1><p>Enter your name once. Every card after that is one tap.</p><input id="nameInput" placeholder="Type your name"><button class="main-btn" onclick="saveName()">Save Name</button></div></div>
 <div class="overlay" id="successOverlay"><div class="popup"><div class="gem">💎</div><h1 id="successTitle">Nice One!</h1><p><b id="successName">You</b>, you've recruited a Treasure customer.</p><div class="big" style="font-size:52px;margin:10px 0">+1</div><p>Today's Store Total</p><div class="big" style="font-size:52px"><span id="successTotal">0</span> <span>/ 15</span></div><button class="main-btn" onclick="closeSuccess()">Awesome</button></div></div>
@@ -765,6 +810,36 @@ if(document.getElementById("conversionStatus"))document.getElementById("conversi
   if(document.getElementById("pageConversionNow"))document.getElementById("pageConversionNow").textContent=conv?("1 in "+conv):"-";
   if(document.getElementById("pageConversionStatus"))document.getElementById("pageConversionStatus").textContent=!customers?"Enter today’s customer count to calculate conversion.":total>=expected?"On target — great Treasure conversion today.":("Need "+gap+" more card"+(gap===1?"":"s")+" to hit 1 in 200.");
 
+
+  if(document.getElementById("managerPageText")){
+    const managerList=Object.entries(todayCounts()).sort((a,b)=>b[1]-a[1]);
+    const wManagerList=Object.entries(weekCounts()).sort((a,b)=>b[1]-a[1]);
+    const expectedMgr=customers?Math.ceil(customers/200):0;
+    const gapMgr=Math.max(0,expectedMgr-total);
+    const convMgr=total>0&&customers?Math.round(customers/total):0;
+    document.getElementById("managerPageText").textContent=[
+      "TODAY",
+      "Cards: "+total+" / "+TARGET,
+      "Remaining: "+Math.max(0,TARGET-total),
+      "Leader: "+(managerList.length?managerList[0][0]+" ("+managerList[0][1]+")":"No leader yet"),
+      "",
+      "WEEK",
+      "Week Total: "+weekEntries().length,
+      "Weekly Champion: "+(wManagerList.length?wManagerList[0][0]+" ("+wManagerList[0][1]+")":"No champion yet"),
+      "",
+      "CONVERSION",
+      "Customers: "+(customers||"Not entered"),
+      "Current: "+(convMgr?("1 in "+convMgr):"-"),
+      "Target: 1 in 200",
+      "Expected Cards: "+expectedMgr,
+      "Conversion Gap: "+gapMgr
+    ].join("\n");
+  }
+  if(document.getElementById("lastTreasureBox")){
+    const last=todayEntries().slice(-1)[0];
+    document.getElementById("lastTreasureBox").innerHTML=last?("<b>"+last.name+"</b><small>"+new Date(last.time).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+" · Last card logged today</small>"):"No entries yet today.";
+  }
+
 const list=Object.entries(todayCounts()).sort((a,b)=>b[1]-a[1]);document.getElementById("bestToday").textContent=list.length?list[0][0]:"-";document.getElementById("bestCards").textContent=list.length?list[0][1]+" cards":"0 cards";document.getElementById("dailyLeader").textContent=list.length?list[0][0]:"No leader yet";document.getElementById("dailyLeaderCards").textContent=list.length?list[0][1]+" Treasure cards today":"Start the challenge";if(document.getElementById("topButtonLeader"))document.getElementById("topButtonLeader").textContent=list.length?("👑 "+list[0][0]+" leading"):"👑 No leader yet";
   const wList=Object.entries(weekCounts()).sort((a,b)=>b[1]-a[1]);
   if(document.getElementById("weeklyChampion")){
@@ -798,13 +873,33 @@ function renderActivity(){
   });
 }
 
-window.showHome=function(){document.body.classList.remove("show-conversion");render()}
-window.showConversion=function(){document.body.classList.add("show-conversion");render()}
+
+window.showManagerPage=function(){
+  const pin=prompt("Manager access code:");
+  if(pin!==MANAGER_PIN){alert("Incorrect manager code.");return}
+  document.body.classList.remove("show-conversion");
+  document.body.classList.add("show-manager");
+  render();
+}
+
+window.showHome=function(){document.body.classList.remove("show-conversion");document.body.classList.remove("show-manager");render()}
+window.showConversion=function(){document.body.classList.remove("show-manager");document.body.classList.add("show-conversion");render()}
 window.saveConversionCustomers=function(){customers=parseInt(document.getElementById("conversionCustomerInput").value||"0",10)||0;localStorage.setItem("treasureCustomers",customers);render()}
 window.showHistory=function(){const recent=entries.slice(-10).reverse();alert(recent.length?recent.map(e=>new Date(e.time).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+" - "+e.name).join("\n"):"No history yet.")}
 window.openManager=function(){const pin=prompt("Manager access code:");if(pin!==MANAGER_PIN){alert("Incorrect manager code.");return}const list=Object.entries(todayCounts()).sort((a,b)=>b[1]-a[1]),todayTotal=todayEntries().length,pct=Math.round((todayTotal/TARGET)*100);const lines=["VALEGATE TREASURE UPDATE","","Today's Total: "+todayTotal+" / "+TARGET,"Achievement: "+pct+"%","Remaining: "+Math.max(0,TARGET-todayTotal),"Week Total: "+weekEntries().length,"","Today's Leader:",list.length?list[0][0]+" - "+list[0][1]:"No cards logged yet","","Leaderboard:",...(list.length?list.map((x,i)=>(i+1)+". "+x[0]+" - "+x[1]):["No cards logged yet."])];document.getElementById("managerText").innerText=lines.join("\n");document.getElementById("managerOverlay").style.display="flex"}
-window.closeManager=function(){document.getElementById("managerOverlay").style.display="none"}
+window.closeManager=function(){document.getElementById("managerOverlay").style.display="none";document.body.classList.remove("show-manager")}
 window.copySummary=function(){navigator.clipboard.writeText(document.getElementById("managerText").innerText).then(()=>alert("Daily summary copied."))}
+
+window.deleteLastTreasure=function(){
+  const pin=prompt("Manager code:");
+  if(pin!==MANAGER_PIN){alert("Incorrect manager code.");return}
+  const last=todayEntries().slice(-1)[0];
+  if(!last){alert("No Treasure cards to delete today.");return}
+  if(confirm("Delete last Treasure card from "+last.name+"?")){
+    remove(ref(db,"stores/valegate/entries/"+last.id)).then(()=>alert("Last Treasure card deleted.")).catch(err=>alert("Could not delete last card: "+err.message));
+  }
+}
+
 window.resetToday=function(){const pin=prompt("Reset code:");if(pin!==RESET_PIN){alert("Incorrect reset code.");return}if(confirm("Reset today's Valegate entries?")){Promise.all(todayEntries().map(e=>remove(ref(db,"stores/valegate/entries/"+e.id)))).then(()=>alert("Today reset."))}}
 window.resetAllTotals=function(){const pin=prompt("Reset ALL totals code:");if(pin!==RESET_PIN){alert("Incorrect reset code.");return}const confirmText=prompt("Type RESET ALL to clear every Treasure entry:");if(confirmText!=="RESET ALL"){alert("Reset cancelled.");return}remove(entriesRef).then(()=>alert("All Treasure totals have been reset.")).catch(err=>alert("Could not reset all totals: "+err.message))}
 function confetti(){const colors=["#e30613","#b8893d","#fff1c9","#5f8f3a","#f46b36"];for(let i=0;i<85;i++){const c=document.createElement("div");c.className="confetti";c.style.left=Math.random()*100+"vw";c.style.background=colors[Math.floor(Math.random()*colors.length)];c.style.animationDelay=Math.random()*0.6+"s";document.body.appendChild(c);setTimeout(()=>c.remove(),2500)}}
