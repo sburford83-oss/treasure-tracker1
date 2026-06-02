@@ -774,7 +774,7 @@ function renderActivity(){
   recent.forEach(e=>{
     const row=document.createElement("div");
     row.className="activity-row";
-    row.innerHTML='<div class="activity-icon">💎</div><div><div class="activity-main">'+e.name+' added a Treasure card</div><div class="activity-time">'+timeAgo(e.time)+'</div></div>';
+    row.innerHTML='<div class="activity-icon">💎</div><div><div class="activity-main">'+e.name+' Recruited a Treasure card</div><div class="activity-time">'+timeAgo(e.time)+'</div></div>';
     feed.appendChild(row);
   });
 }
