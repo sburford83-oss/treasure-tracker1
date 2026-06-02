@@ -632,6 +632,17 @@ display:flex;align-items:center;justify-content:center;flex:0 0 auto;
   .option-c-title{font-size:17px!important}
 }
 
+
+/* Conversion page */
+.page{padding:0 16px 22px;margin-top:-58px;position:relative;z-index:3}
+.conversion-page{padding-bottom:110px}
+.conversion-card{margin-top:0}
+body.show-conversion main.content{display:none}
+body.show-conversion .option-c-wrap{display:none!important}
+body.show-conversion #conversionPage{display:block!important}
+body:not(.show-conversion) #conversionPage{display:none!important}
+body.show-conversion .hero{padding-bottom:82px}
+
 </style>
 </head>
 <body>
@@ -682,23 +693,26 @@ display:flex;align-items:center;justify-content:center;flex:0 0 auto;
 </section>
 <section class="card"><div class="leader-head"><div class="eyebrow">Today's Top Recruiters</div><div>🏅</div></div><div id="leaderboard"><p>Loading leaderboard...</p></div></section>
 </main>
-<nav class="nav"><button onclick="render()"><span>🏠</span>Home</button><button onclick="showHistory()"><span>🕘</span>History</button><button onclick="openManager()"><span>📊</span>Manager</button><button onclick="openName()"><span>👤</span>Name</button></nav>
+<section class="page conversion-page" id="conversionPage" style="display:none">
+  <section class="card conversion-card">
+    <div class="leader-head"><div class="eyebrow">Treasure Conversion</div><div>📊</div></div>
+    <div class="eyebrow">Customers today</div>
+    <input class="conv-input" id="conversionCustomerInput" type="number" inputmode="numeric" placeholder="Enter footfall" oninput="saveConversionCustomers()">
+    <div class="conversion-grid">
+      <div class="conv-box"><div class="eyebrow">Current</div><b id="pageConversionNow">-</b><small>customers per card</small></div>
+      <div class="conv-box"><div class="eyebrow">Target</div><b>1 in 200</b><small>Treasure goal</small></div>
+      <div class="conv-box"><div class="eyebrow">Expected</div><b id="pageExpectedCards">0</b><small>cards needed</small></div>
+      <div class="conv-box"><div class="eyebrow">Gap</div><b id="pageConversionGap">0</b><small>more cards</small></div>
+    </div>
+    <div class="conv-status" id="pageConversionStatus">Enter today’s customer count to calculate conversion.</div>
+  </section>
+</section>
+
+<nav class="nav"><button onclick="showHome()"><span>🏠</span>Home</button><button onclick="showConversion()"><span>🗣️</span>Conversion</button><button onclick="openManager()"><span>📊</span>Manager</button><button onclick="openName()"><span>👤</span>Name</button></nav>
 </div>
 <div class="overlay" id="nameOverlay"><div class="popup"><div class="gem">💎</div><h1>Your Name</h1><p>Enter your name once. Every card after that is one tap.</p><input id="nameInput" placeholder="Type your name"><button class="main-btn" onclick="saveName()">Save Name</button></div></div>
 <div class="overlay" id="successOverlay"><div class="popup"><div class="gem">💎</div><h1 id="successTitle">Nice One!</h1><p><b id="successName">You</b>, you've recruited a Treasure customer.</p><div class="big" style="font-size:52px;margin:10px 0">+1</div><p>Today's Store Total</p><div class="big" style="font-size:52px"><span id="successTotal">0</span> <span>/ 15</span></div><button class="main-btn" onclick="closeSuccess()">Awesome</button></div></div>
 <div class="overlay" id="managerOverlay"><div class="popup"><h1>Manager View</h1>
-<div class="card" style="box-shadow:none;margin:8px 0 14px;text-align:left">
-  <div class="leader-head"><div class="eyebrow">Treasure Conversion</div><div>📊</div></div>
-  <div class="eyebrow">Customers today</div>
-  <input class="conv-input" id="managerCustomerInput" type="number" inputmode="numeric" placeholder="Enter footfall" oninput="saveManagerCustomers()">
-  <div class="conversion-grid">
-    <div class="conv-box"><div class="eyebrow">Current</div><b id="managerConversionNow">-</b><small>customers per card</small></div>
-    <div class="conv-box"><div class="eyebrow">Target</div><b>1 in 200</b><small>Treasure goal</small></div>
-    <div class="conv-box"><div class="eyebrow">Expected</div><b id="managerExpectedCards">0</b><small>cards needed</small></div>
-    <div class="conv-box"><div class="eyebrow">Gap</div><b id="managerConversionGap">0</b><small>more cards</small></div>
-  </div>
-  <div class="conv-status" id="managerConversionStatus">Enter today’s customer count to calculate conversion.</div>
-</div>
 <p id="managerText">Loading...</p><button class="ghost-btn" onclick="copySummary()">Copy Daily Summary</button><button class="ghost-btn" onclick="resetToday()">Reset Today</button><button class="ghost-btn" onclick="resetAllTotals()">Reset All Totals</button><button class="main-btn" onclick="closeManager()">Close</button></div></div>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
@@ -738,11 +752,18 @@ if(document.getElementById("expectedCards"))document.getElementById("expectedCar
 if(document.getElementById("conversionGap"))document.getElementById("conversionGap").textContent=gap;
 if(document.getElementById("conversionNow"))document.getElementById("conversionNow").textContent=conv?("1 in "+conv):"-";
 if(document.getElementById("conversionStatus"))document.getElementById("conversionStatus").textContent=!customers?"Enter today’s customer count to calculate conversion.":total>=expected?"On target — great Treasure conversion today.":("Need "+gap+" more card"+(gap===1?"":"s")+" to hit 1 in 200.");
-  if(document.getElementById("managerCustomerInput"))document.getElementById("managerCustomerInput").value=customers||"";
-  if(document.getElementById("managerExpectedCards"))document.getElementById("managerExpectedCards").textContent=expected;
-  if(document.getElementById("managerConversionGap"))document.getElementById("managerConversionGap").textContent=gap;
-  if(document.getElementById("managerConversionNow"))document.getElementById("managerConversionNow").textContent=conv?("1 in "+conv):"-";
-  if(document.getElementById("managerConversionStatus"))document.getElementById("managerConversionStatus").textContent=!customers?"Enter today’s customer count to calculate conversion.":total>=expected?"On target — great Treasure conversion today.":("Need "+gap+" more card"+(gap===1?"":"s")+" to hit 1 in 200.");
+  if(document.getElementById("managerCustomerInput"))if(document.getElementById("managerCustomerInput"))document.getElementById("managerCustomerInput").value=customers||"";
+  if(document.getElementById("managerExpectedCards"))if(document.getElementById("managerExpectedCards"))document.getElementById("managerExpectedCards").textContent=expected;
+  if(document.getElementById("managerConversionGap"))if(document.getElementById("managerConversionGap"))document.getElementById("managerConversionGap").textContent=gap;
+  if(document.getElementById("managerConversionNow"))if(document.getElementById("managerConversionNow"))document.getElementById("managerConversionNow").textContent=conv?("1 in "+conv):"-";
+  if(document.getElementById("managerConversionStatus"))if(document.getElementById("managerConversionStatus"))document.getElementById("managerConversionStatus").textContent=!customers?"Enter today’s customer count to calculate conversion.":total>=expected?"On target — great Treasure conversion today.":("Need "+gap+" more card"+(gap===1?"":"s")+" to hit 1 in 200.");
+
+
+  if(document.getElementById("conversionCustomerInput"))document.getElementById("conversionCustomerInput").value=customers||"";
+  if(document.getElementById("pageExpectedCards"))document.getElementById("pageExpectedCards").textContent=expected;
+  if(document.getElementById("pageConversionGap"))document.getElementById("pageConversionGap").textContent=gap;
+  if(document.getElementById("pageConversionNow"))document.getElementById("pageConversionNow").textContent=conv?("1 in "+conv):"-";
+  if(document.getElementById("pageConversionStatus"))document.getElementById("pageConversionStatus").textContent=!customers?"Enter today’s customer count to calculate conversion.":total>=expected?"On target — great Treasure conversion today.":("Need "+gap+" more card"+(gap===1?"":"s")+" to hit 1 in 200.");
 
 const list=Object.entries(todayCounts()).sort((a,b)=>b[1]-a[1]);document.getElementById("bestToday").textContent=list.length?list[0][0]:"-";document.getElementById("bestCards").textContent=list.length?list[0][1]+" cards":"0 cards";document.getElementById("dailyLeader").textContent=list.length?list[0][0]:"No leader yet";document.getElementById("dailyLeaderCards").textContent=list.length?list[0][1]+" Treasure cards today":"Start the challenge";if(document.getElementById("topButtonLeader"))document.getElementById("topButtonLeader").textContent=list.length?("👑 "+list[0][0]+" leading"):"👑 No leader yet";
   const wList=Object.entries(weekCounts()).sort((a,b)=>b[1]-a[1]);
@@ -776,6 +797,10 @@ function renderActivity(){
     feed.appendChild(row);
   });
 }
+
+window.showHome=function(){document.body.classList.remove("show-conversion");render()}
+window.showConversion=function(){document.body.classList.add("show-conversion");render()}
+window.saveConversionCustomers=function(){customers=parseInt(document.getElementById("conversionCustomerInput").value||"0",10)||0;localStorage.setItem("treasureCustomers",customers);render()}
 window.showHistory=function(){const recent=entries.slice(-10).reverse();alert(recent.length?recent.map(e=>new Date(e.time).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+" - "+e.name).join("\n"):"No history yet.")}
 window.openManager=function(){const pin=prompt("Manager access code:");if(pin!==MANAGER_PIN){alert("Incorrect manager code.");return}const list=Object.entries(todayCounts()).sort((a,b)=>b[1]-a[1]),todayTotal=todayEntries().length,pct=Math.round((todayTotal/TARGET)*100);const lines=["VALEGATE TREASURE UPDATE","","Today's Total: "+todayTotal+" / "+TARGET,"Achievement: "+pct+"%","Remaining: "+Math.max(0,TARGET-todayTotal),"Week Total: "+weekEntries().length,"","Today's Leader:",list.length?list[0][0]+" - "+list[0][1]:"No cards logged yet","","Leaderboard:",...(list.length?list.map((x,i)=>(i+1)+". "+x[0]+" - "+x[1]):["No cards logged yet."])];document.getElementById("managerText").innerText=lines.join("\n");document.getElementById("managerOverlay").style.display="flex"}
 window.closeManager=function(){document.getElementById("managerOverlay").style.display="none"}
