@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-title" content="Treasure">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#e30613">
-<link <link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
 
 <title>Valegate Treasure Tracker</title>
@@ -674,18 +674,6 @@ display:flex;align-items:center;justify-content:center;flex:0 0 auto;
 </section>
 <section class="card"><div class="target-head"><span>Today's Store Total</span><span class="target-badge">Target 15</span></div><div class="big"><span id="todayTotal">0</span> <span>/ 15</span></div><div class="progress"><div class="bar" id="bar">0%</div></div><div class="remaining"><b id="remaining">50</b> more needed today 💎</div><div class="milestones"><div class="milestone" id="m10">3 🎉</div><div class="milestone" id="m25">6 🚀</div><div class="milestone" id="m40">10 🔥</div><div class="milestone" id="m50">15 🏆</div></div></section>
 <section class="grid"><div class="card stat-card"><div class="stat-icon">📅</div><div class="eyebrow">Week Total</div><strong id="weekTotal">0</strong></div><div class="card stat-card"><div class="stat-icon">🏆</div><div class="eyebrow">Best Today</div><strong id="bestToday">-</strong><small id="bestCards">0 cards</small></div></section>
-<section class="card">
-<div class="leader-head"><div class="eyebrow">Treasure Conversion</div><div>📊</div></div>
-<div class="eyebrow">Customers today</div>
-<input class="conv-input" id="customerInput" type="number" inputmode="numeric" placeholder="Enter footfall" oninput="saveCustomers()">
-<div class="conversion-grid">
-<div class="conv-box"><div class="eyebrow">Current</div><b id="conversionNow">-</b><small>customers per card</small></div>
-<div class="conv-box"><div class="eyebrow">Target</div><b>1 in 200</b><small>Treasure goal</small></div>
-<div class="conv-box"><div class="eyebrow">Expected</div><b id="expectedCards">0</b><small>cards needed</small></div>
-<div class="conv-box"><div class="eyebrow">Gap</div><b id="conversionGap">0</b><small>more cards</small></div>
-</div>
-<div class="conv-status" id="conversionStatus">Enter today’s customer count to calculate conversion.</div>
-</section>
 <button class="add-btn" onclick="addTreasure()"><div class="add-gem">💎</div><div><b>Treasure Found</b><small>Tap here to add a card</small></div></button>
 
 <section class="card">
@@ -698,7 +686,20 @@ display:flex;align-items:center;justify-content:center;flex:0 0 auto;
 </div>
 <div class="overlay" id="nameOverlay"><div class="popup"><div class="gem">💎</div><h1>Your Name</h1><p>Enter your name once. Every card after that is one tap.</p><input id="nameInput" placeholder="Type your name"><button class="main-btn" onclick="saveName()">Save Name</button></div></div>
 <div class="overlay" id="successOverlay"><div class="popup"><div class="gem">💎</div><h1 id="successTitle">Nice One!</h1><p><b id="successName">You</b>, you've recruited a Treasure customer.</p><div class="big" style="font-size:52px;margin:10px 0">+1</div><p>Today's Store Total</p><div class="big" style="font-size:52px"><span id="successTotal">0</span> <span>/ 15</span></div><button class="main-btn" onclick="closeSuccess()">Awesome</button></div></div>
-<div class="overlay" id="managerOverlay"><div class="popup"><h1>Manager View</h1><p id="managerText">Loading...</p><button class="ghost-btn" onclick="copySummary()">Copy Daily Summary</button><button class="ghost-btn" onclick="resetToday()">Reset Today</button><button class="ghost-btn" onclick="resetAllTotals()">Reset All Totals</button><button class="main-btn" onclick="closeManager()">Close</button></div></div>
+<div class="overlay" id="managerOverlay"><div class="popup"><h1>Manager View</h1>
+<div class="card" style="box-shadow:none;margin:8px 0 14px;text-align:left">
+  <div class="leader-head"><div class="eyebrow">Treasure Conversion</div><div>📊</div></div>
+  <div class="eyebrow">Customers today</div>
+  <input class="conv-input" id="managerCustomerInput" type="number" inputmode="numeric" placeholder="Enter footfall" oninput="saveManagerCustomers()">
+  <div class="conversion-grid">
+    <div class="conv-box"><div class="eyebrow">Current</div><b id="managerConversionNow">-</b><small>customers per card</small></div>
+    <div class="conv-box"><div class="eyebrow">Target</div><b>1 in 200</b><small>Treasure goal</small></div>
+    <div class="conv-box"><div class="eyebrow">Expected</div><b id="managerExpectedCards">0</b><small>cards needed</small></div>
+    <div class="conv-box"><div class="eyebrow">Gap</div><b id="managerConversionGap">0</b><small>more cards</small></div>
+  </div>
+  <div class="conv-status" id="managerConversionStatus">Enter today’s customer count to calculate conversion.</div>
+</div>
+<p id="managerText">Loading...</p><button class="ghost-btn" onclick="copySummary()">Copy Daily Summary</button><button class="ghost-btn" onclick="resetToday()">Reset Today</button><button class="ghost-btn" onclick="resetAllTotals()">Reset All Totals</button><button class="main-btn" onclick="closeManager()">Close</button></div></div>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import{getDatabase,ref,push,onValue,remove,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
@@ -713,7 +714,8 @@ window.openName=function(){document.getElementById("nameInput").value=localName;
 window.saveName=function(){const n=document.getElementById("nameInput").value.trim();if(!n){alert("Please type your name first.");return}localName=n;localStorage.setItem("treasureName",n);document.getElementById("nameOverlay").style.display="none";render()}
 window.addTreasure=function(){if(!localName){openName();return}push(entriesRef,{store:"Valegate",name:localName,date:todayKey(),week:thisWeekKey(),time:new Date().toISOString(),createdAt:serverTimestamp()}).then(()=>{confetti();document.getElementById("successName").textContent=localName;document.getElementById("successTitle").textContent="Nice One!";document.getElementById("successOverlay").style.display="flex"}).catch(err=>alert("Could not save card: "+err.message))}
 window.closeSuccess=function(){document.getElementById("successOverlay").style.display="none"}
-window.render=render;window.saveCustomers=function(){customers=parseInt(document.getElementById("customerInput").value||"0",10)||0;localStorage.setItem("treasureCustomers",customers);render()}
+window.render=render;window.saveCustomers=function(){const el=document.getElementById("customerInput")||document.getElementById("managerCustomerInput");customers=parseInt((el&&el.value)||"0",10)||0;localStorage.setItem("treasureCustomers",customers);render()}
+window.saveManagerCustomers=function(){customers=parseInt(document.getElementById("managerCustomerInput").value||"0",10)||0;localStorage.setItem("treasureCustomers",customers);render()}
 function todayEntries(){return entries.filter(e=>e.date===todayKey())}
 function weekEntries(){return entries.filter(e=>e.week===thisWeekKey())}
 function todayCounts(){const counts={};todayEntries().forEach(e=>counts[e.name]=(counts[e.name]||0)+1);return counts}
@@ -736,6 +738,12 @@ document.getElementById("expectedCards").textContent=expected;
 document.getElementById("conversionGap").textContent=gap;
 document.getElementById("conversionNow").textContent=conv?("1 in "+conv):"-";
 document.getElementById("conversionStatus").textContent=!customers?"Enter today’s customer count to calculate conversion.":total>=expected?"On target — great Treasure conversion today.":("Need "+gap+" more card"+(gap===1?"":"s")+" to hit 1 in 200.");
+  if(document.getElementById("managerCustomerInput"))document.getElementById("managerCustomerInput").value=customers||"";
+  if(document.getElementById("managerExpectedCards"))document.getElementById("managerExpectedCards").textContent=expected;
+  if(document.getElementById("managerConversionGap"))document.getElementById("managerConversionGap").textContent=gap;
+  if(document.getElementById("managerConversionNow"))document.getElementById("managerConversionNow").textContent=conv?("1 in "+conv):"-";
+  if(document.getElementById("managerConversionStatus"))document.getElementById("managerConversionStatus").textContent=!customers?"Enter today’s customer count to calculate conversion.":total>=expected?"On target — great Treasure conversion today.":("Need "+gap+" more card"+(gap===1?"":"s")+" to hit 1 in 200.");
+
 const list=Object.entries(todayCounts()).sort((a,b)=>b[1]-a[1]);document.getElementById("bestToday").textContent=list.length?list[0][0]:"-";document.getElementById("bestCards").textContent=list.length?list[0][1]+" cards":"0 cards";document.getElementById("dailyLeader").textContent=list.length?list[0][0]:"No leader yet";document.getElementById("dailyLeaderCards").textContent=list.length?list[0][1]+" Treasure cards today":"Start the challenge";if(document.getElementById("topButtonLeader"))document.getElementById("topButtonLeader").textContent=list.length?("👑 "+list[0][0]+" leading"):"👑 No leader yet";
   const wList=Object.entries(weekCounts()).sort((a,b)=>b[1]-a[1]);
   if(document.getElementById("weeklyChampion")){
@@ -764,7 +772,7 @@ function renderActivity(){
   recent.forEach(e=>{
     const row=document.createElement("div");
     row.className="activity-row";
-    row.innerHTML='<div class="activity-icon">💎</div><div><div class="activity-main">'+e.name+' Recruited a Treasure card</div><div class="activity-time">'+timeAgo(e.time)+'</div></div>';
+    row.innerHTML='<div class="activity-icon">💎</div><div><div class="activity-main">'+e.name+' recruited a Treasure customer 💎</div><div class="activity-time">'+timeAgo(e.time)+'</div></div>';
     feed.appendChild(row);
   });
 }
