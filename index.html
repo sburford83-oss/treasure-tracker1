@@ -672,11 +672,6 @@ body.show-manager .hero{padding-bottom:82px}
 .treasure-bell-sub{font-size:13px;font-weight:800;opacity:.92;margin-top:3px}
 .sound-toggle{position:fixed;right:14px;bottom:92px;z-index:30;border:none;border-radius:999px;background:rgba(45,24,8,.92);color:white;padding:10px 12px;font-weight:900;box-shadow:0 8px 18px rgba(0,0,0,.22)}
 
-
-/* Clean Home Screen refinement */
-body:not(.show-conversion):not(.show-manager) main.content{padding-bottom:120px}
-body:not(.show-conversion):not(.show-manager) .card{margin-bottom:14px}
-
 </style>
 </head>
 <body>
@@ -708,14 +703,25 @@ body:not(.show-conversion):not(.show-manager) .card{margin-bottom:14px}
 
 <main class="content">
 <section class="card welcome"><div><div class="eyebrow">Welcome back</div><div class="name"><span id="nameText">Team</span> 👋</div></div><button class="change" onclick="openName()">Change</button></section>
+<section class="card winner-card"><div class="crown">👑</div><div><div class="eyebrow">Today's Leader</div><strong id="dailyLeader">No leader yet</strong><small id="dailyLeaderCards">Start the challenge</small></div></section><section class="card weekly-champ-card">
+  <div class="weekly-champ-inner">
+    <div class="weekly-cup">🏆</div>
+    <div>
+      <div class="eyebrow">Weekly Champion</div>
+      <strong id="weeklyChampion">No champion yet</strong>
+      <small id="weeklyChampionCards">This week’s top recruiter</small>
+    </div>
+  </div>
+</section>
 <section class="card"><div class="target-head"><span>Today's Store Total</span><span class="target-badge">Target 15</span></div><div class="big"><span id="todayTotal">0</span> <span>/ 15</span></div><div class="progress"><div class="bar" id="bar">0%</div></div><div class="remaining"><b id="remaining">50</b> more needed today 💎</div><div class="milestones"><div class="milestone" id="m10">3 🎉</div><div class="milestone" id="m25">6 🚀</div><div class="milestone" id="m40">10 🔥</div><div class="milestone" id="m50">15 🏆</div></div></section>
+<section class="grid"><div class="card stat-card"><div class="stat-icon">📅</div><div class="eyebrow">Week Total</div><strong id="weekTotal">0</strong></div><div class="card stat-card"><div class="stat-icon">🏆</div><div class="eyebrow">Best Today</div><strong id="bestToday">-</strong><small id="bestCards">0 cards</small></div></section>
 <button class="add-btn" onclick="addTreasure()"><div class="add-gem">💎</div><div><b>Treasure Found</b><small>Tap here to add a card</small></div></button>
 
-<section class="card"><div class="leader-head"><div class="eyebrow">Today's Top 3 Recruiters</div><div>🏅</div></div><div id="leaderboard"><p>Loading leaderboard...</p></div></section>
 <section class="card">
   <div class="leader-head"><div class="eyebrow">Live Activity</div><div>✨</div></div>
   <div id="activityFeed"><p style="color:#7b684f">No activity yet today.</p></div>
 </section>
+<section class="card"><div class="leader-head"><div class="eyebrow">Today's Top Recruiters</div><div>🏅</div></div><div id="leaderboard"><p>Loading leaderboard...</p></div></section>
 </main>
 <section class="page conversion-page" id="conversionPage" style="display:none">
   <section class="card conversion-card">
@@ -858,7 +864,7 @@ const list=Object.entries(todayCounts()).sort((a,b)=>b[1]-a[1]);document.getElem
   if(document.getElementById("weeklyChampion")){
     document.getElementById("weeklyChampion").textContent=wList.length?wList[0][0]:"No champion yet";
     document.getElementById("weeklyChampionCards").textContent=wList.length?wList[0][1]+" cards this week":"This week’s top recruiter";
-  }const lb=document.getElementById("leaderboard");lb.innerHTML="";if(!list.length){lb.innerHTML="<p style='color:#7b684f'>No Treasure cards logged yet today.</p>";renderActivity();return}list.slice(0,3).forEach((item,index)=>{const row=document.createElement("div");row.className="row"+(item[0]===localName?" you":"");const medal=index===0?"🥇":index===1?"🥈":index===2?"🥉":index+1;row.innerHTML='<div class="medal">'+medal+'</div><div>'+item[0]+(item[0]===localName?' (You)':'')+'</div><div class="score">'+item[1]+'</div>';lb.appendChild(row)});renderActivity()}
+  }const lb=document.getElementById("leaderboard");lb.innerHTML="";if(!list.length){lb.innerHTML="<p style='color:#7b684f'>No Treasure cards logged yet today.</p>";renderActivity();return}list.forEach((item,index)=>{const row=document.createElement("div");row.className="row"+(item[0]===localName?" you":"");const medal=index===0?"🥇":index===1?"🥈":index===2?"🥉":index+1;row.innerHTML='<div class="medal">'+medal+'</div><div>'+item[0]+(item[0]===localName?' (You)':'')+'</div><div class="score">'+item[1]+'</div>';lb.appendChild(row)});renderActivity()}
 function timeAgo(iso){
   const diff=Math.max(0,Date.now()-new Date(iso).getTime());
   const mins=Math.floor(diff/60000);
