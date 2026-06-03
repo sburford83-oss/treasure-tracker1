@@ -663,9 +663,19 @@ body.show-manager .hero{padding-bottom:82px}
 .last-card-box b{display:block;font-size:18px;color:#4b2b10}
 .last-card-box small{color:#7b684f}
 
+
+/* Treasure Bell Feedback */
+.treasure-bell-banner{position:fixed;left:50%;top:18px;transform:translateX(-50%) translateY(-120px);width:calc(100% - 32px);max-width:440px;z-index:999;background:linear-gradient(135deg,#e30613,#ff4d57);color:white;border-radius:24px;padding:16px 18px;box-shadow:0 18px 34px rgba(227,6,19,.36);display:flex;align-items:center;gap:12px;opacity:0;transition:transform .35s ease,opacity .35s ease;pointer-events:none}
+.treasure-bell-banner.show{transform:translateX(-50%) translateY(0);opacity:1}
+.treasure-bell-icon{width:46px;height:46px;border-radius:17px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:25px;flex:0 0 auto}
+.treasure-bell-title{font-weight:950;font-size:17px;line-height:1.1;text-transform:uppercase;letter-spacing:.4px}
+.treasure-bell-sub{font-size:13px;font-weight:800;opacity:.92;margin-top:3px}
+.sound-toggle{position:fixed;right:14px;bottom:92px;z-index:30;border:none;border-radius:999px;background:rgba(45,24,8,.92);color:white;padding:10px 12px;font-weight:900;box-shadow:0 8px 18px rgba(0,0,0,.22)}
+
 </style>
 </head>
 <body>
+<div class="treasure-bell-banner" id="treasureBellBanner"><div class="treasure-bell-icon">🔔</div><div><div class="treasure-bell-title">Treasure Bell!</div><div class="treasure-bell-sub" id="treasureBellText">Treasure customer recruited 💎</div></div></div><button class="sound-toggle" id="soundToggle" onclick="toggleTreasureSound()">🔇 Sound Off</button>
 <div class="app">
 <header class="hero"><div class="hero-inner"><div class="gem">💎</div><div class="title">TREASURE</div><div class="store-pill">🏪 VALEGATE</div><br><div class="live-pill"><span class="live-dot"></span><span id="liveStatus">Connecting live data...</span></div></div></header>
 <div class="option-c-wrap">
@@ -766,12 +776,21 @@ const firebaseConfig={apiKey:"AIzaSyB1mIRzjLZTE8MhH6ArcXtFxrHNsDN79SE",authDomai
 const TARGET=15,MANAGER_PIN="6530",RESET_PIN="0356";
 const app=initializeApp(firebaseConfig),db=getDatabase(app),entriesRef=ref(db,"stores/valegate/entries");
 let localName=localStorage.getItem("treasureName")||"",entries=[],lastTotalSeen=0,customers=parseInt(localStorage.getItem("treasureCustomers")||"0",10)||0;
+
+let treasureSoundOn=localStorage.getItem("treasureSoundOn")==="true";
+function updateSoundToggle(){const btn=document.getElementById("soundToggle");if(btn)btn.textContent=treasureSoundOn?"🔔 Sound On":"🔇 Sound Off"}
+window.toggleTreasureSound=function(){treasureSoundOn=!treasureSoundOn;localStorage.setItem("treasureSoundOn",treasureSoundOn?"true":"false");updateSoundToggle();if(treasureSoundOn)playTreasureSound()}
+function treasureHaptic(){try{if(navigator.vibrate)navigator.vibrate([80,40,80])}catch(e){}}
+function playTreasureSound(){if(!treasureSoundOn)return;try{const AudioContext=window.AudioContext||window.webkitAudioContext;if(!AudioContext)return;const ctx=new AudioContext();const osc=ctx.createOscillator();const gain=ctx.createGain();osc.type="sine";osc.frequency.setValueAtTime(880,ctx.currentTime);osc.frequency.setValueAtTime(1175,ctx.currentTime+0.08);gain.gain.setValueAtTime(0.0001,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(0.08,ctx.currentTime+0.02);gain.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.22);osc.connect(gain);gain.connect(ctx.destination);osc.start();osc.stop(ctx.currentTime+0.24)}catch(e){}}
+function showTreasureBell(name){const banner=document.getElementById("treasureBellBanner");const text=document.getElementById("treasureBellText");if(!banner)return;if(text)text.textContent=(name||"Someone")+" recruited a Treasure customer 💎";banner.classList.add("show");clearTimeout(window.__treasureBellTimer);window.__treasureBellTimer=setTimeout(()=>banner.classList.remove("show"),2600)}
+function treasureFeedback(name){treasureHaptic();playTreasureSound();showTreasureBell(name)}
+
 function todayKey(){return new Date().toISOString().slice(0,10)}
 function weekKey(dateString){const d=new Date(dateString+"T00:00:00"),onejan=new Date(d.getFullYear(),0,1);return d.getFullYear()+"-W"+Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7)}
 function thisWeekKey(){return weekKey(todayKey())}
 window.openName=function(){document.getElementById("nameInput").value=localName;document.getElementById("nameOverlay").style.display="flex"}
 window.saveName=function(){const n=document.getElementById("nameInput").value.trim();if(!n){alert("Please type your name first.");return}localName=n;localStorage.setItem("treasureName",n);document.getElementById("nameOverlay").style.display="none";render()}
-window.addTreasure=function(){if(!localName){openName();return}push(entriesRef,{store:"Valegate",name:localName,date:todayKey(),week:thisWeekKey(),time:new Date().toISOString(),createdAt:serverTimestamp()}).then(()=>{confetti();document.getElementById("successName").textContent=localName;document.getElementById("successTitle").textContent="Nice One!";document.getElementById("successOverlay").style.display="flex"}).catch(err=>alert("Could not save card: "+err.message))}
+window.addTreasure=function(){if(!localName){openName();return}push(entriesRef,{store:"Valegate",name:localName,date:todayKey(),week:thisWeekKey(),time:new Date().toISOString(),createdAt:serverTimestamp()}).then(()=>{confetti();treasureFeedback(localName);document.getElementById("successName").textContent=localName;document.getElementById("successTitle").textContent="Nice One!";document.getElementById("successOverlay").style.display="flex"}).catch(err=>alert("Could not save card: "+err.message))}
 window.closeSuccess=function(){document.getElementById("successOverlay").style.display="none"}
 window.render=render;window.saveCustomers=function(){const el=document.getElementById("customerInput")||document.getElementById("managerCustomerInput");customers=parseInt((el&&el.value)||"0",10)||0;localStorage.setItem("treasureCustomers",customers);render()}
 window.saveManagerCustomers=function(){customers=parseInt(document.getElementById("managerCustomerInput").value||"0",10)||0;localStorage.setItem("treasureCustomers",customers);render()}
@@ -905,7 +924,7 @@ window.resetAllTotals=function(){const pin=prompt("Reset ALL totals code:");if(p
 function confetti(){const colors=["#e30613","#b8893d","#fff1c9","#5f8f3a","#f46b36"];for(let i=0;i<85;i++){const c=document.createElement("div");c.className="confetti";c.style.left=Math.random()*100+"vw";c.style.background=colors[Math.floor(Math.random()*colors.length)];c.style.animationDelay=Math.random()*0.6+"s";document.body.appendChild(c);setTimeout(()=>c.remove(),2500)}}
 function milestoneCheck(newTotal){if(newTotal>lastTotalSeen&&[3,6,10,15].includes(newTotal)){document.getElementById("successTitle").textContent=newTotal===50?"Target Achieved!":newTotal===40?"Almost There!":newTotal===25?"Halfway Push!":"Great Start!";document.getElementById("successName").textContent="Valegate";document.getElementById("successOverlay").style.display="flex";confetti()}lastTotalSeen=newTotal}
 onValue(entriesRef,snapshot=>{const val=snapshot.val()||{};entries=Object.entries(val).map(([id,data])=>({id,...data}));document.getElementById("liveStatus").textContent="Live data connected";const currentTotal=todayEntries().length;render();milestoneCheck(currentTotal)},error=>{document.getElementById("liveStatus").textContent="Live data error";alert("Firebase error: "+error.message)})
-setTimeout(()=>{if(!localName)openName()},500)
+setTimeout(()=>{updateSoundToggle();if(!localName)openName()},500)
 </script>
 </body>
 </html>
