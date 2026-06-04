@@ -791,6 +791,8 @@ function thisWeekKey(){return weekKey(todayKey())}
 window.openName=function(){document.getElementById("nameInput").value=localName;document.getElementById("nameOverlay").style.display="flex"}
 window.saveName=function(){const n=document.getElementById("nameInput").value.trim();if(!n){alert("Please type your name first.");return}localName=n;localStorage.setItem("treasureName",n);document.getElementById("nameOverlay").style.display="none";render()}
 window.addTreasure=function(){if(!localName){openName();return}push(entriesRef,{store:"Valegate",name:localName,date:todayKey(),week:thisWeekKey(),time:new Date().toISOString(),createdAt:serverTimestamp()}).then(()=>{confetti();treasureFeedback(localName);document.getElementById("successName").textContent=localName;document.getElementById("successTitle").textContent="Nice One!";document.getElementById("successOverlay").style.display="flex"}).catch(err=>alert("Could not save card: "+err.message))}
+document.getElementById("successOverlay").style.display="flex";
+setTimeout(()=>{closeSuccess()},3500);
 window.closeSuccess=function(){document.getElementById("successOverlay").style.display="none"}
 window.render=render;window.saveCustomers=function(){const el=document.getElementById("customerInput")||document.getElementById("managerCustomerInput");customers=parseInt((el&&el.value)||"0",10)||0;localStorage.setItem("treasureCustomers",customers);render()}
 window.saveManagerCustomers=function(){customers=parseInt(document.getElementById("managerCustomerInput").value||"0",10)||0;localStorage.setItem("treasureCustomers",customers);render()}
