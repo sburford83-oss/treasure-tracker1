@@ -790,7 +790,8 @@ function weekKey(dateString){const d=new Date(dateString+"T00:00:00"),onejan=new
 function thisWeekKey(){return weekKey(todayKey())}
 window.openName=function(){document.getElementById("nameInput").value=localName;document.getElementById("nameOverlay").style.display="flex"}
 window.saveName=function(){const n=document.getElementById("nameInput").value.trim();if(!n){alert("Please type your name first.");return}localName=n;localStorage.setItem("treasureName",n);document.getElementById("nameOverlay").style.display="none";render()}
-window.addTreasure=function(){if(!localName){openName();return}push(entriesRef,{store:"Valegate",name:localName,date:todayKey(),week:thisWeekKey(),time:new Date().toISOString(),createdAt:serverTimestamp()}).then(()=>{confetti();treasureFeedback(localName);document.getElementById("successName").textContent=localName;document.getElementById("successTitle").textContent="Nice One!";document.getElementById("successOverlay").style.display="flex"}).catch(err=>alert("Could not save card: "+err.message))}
+document.getElementById("successOverlay").style.display="flex";
+setTimeout(()=>{document.getElementById("successOverlay").style.display="none"},2500)
 document.getElementById("successOverlay").style.display="flex";
 setTimeout(()=>{document.getElementById("successOverlay").style.display="none"},2500);
 window.closeSuccess=function(){document.getElementById("successOverlay").style.display="none"}
@@ -924,7 +925,7 @@ window.deleteLastTreasure=function(){
 window.resetToday=function(){const pin=prompt("Reset code:");if(pin!==RESET_PIN){alert("Incorrect reset code.");return}if(confirm("Reset today's Valegate entries?")){Promise.all(todayEntries().map(e=>remove(ref(db,"stores/valegate/entries/"+e.id)))).then(()=>alert("Today reset."))}}
 window.resetAllTotals=function(){const pin=prompt("Reset ALL totals code:");if(pin!==RESET_PIN){alert("Incorrect reset code.");return}const confirmText=prompt("Type RESET ALL to clear every Treasure entry:");if(confirmText!=="RESET ALL"){alert("Reset cancelled.");return}remove(entriesRef).then(()=>alert("All Treasure totals have been reset.")).catch(err=>alert("Could not reset all totals: "+err.message))}
 function confetti(){const colors=["#e30613","#b8893d","#fff1c9","#5f8f3a","#f46b36"];for(let i=0;i<85;i++){const c=document.createElement("div");c.className="confetti";c.style.left=Math.random()*100+"vw";c.style.background=colors[Math.floor(Math.random()*colors.length)];c.style.animationDelay=Math.random()*0.6+"s";document.body.appendChild(c);setTimeout(()=>c.remove(),2500)}}
-function milestoneCheck(newTotal){if(newTotal>lastTotalSeen&&[3,6,10,15].includes(newTotal)){document.getElementById("successTitle").textContent=newTotal===50?"Target Achieved!":newTotal===40?"Almost There!":newTotal===25?"Halfway Push!":"Great Start!";document.getElementById("successName").textContent="Valegate";document.getElementById("successOverlay").style.display="flex";confetti()}lastTotalSeen=newTotal}
+document.getElementById("successOverlay").style.display="flex";setTimeout(()=>{document.getElementById("successOverlay").style.display="none"},2500)
 onValue(entriesRef,snapshot=>{const val=snapshot.val()||{};entries=Object.entries(val).map(([id,data])=>({id,...data}));document.getElementById("liveStatus").textContent="Live data connected";const currentTotal=todayEntries().length;render();milestoneCheck(currentTotal)},error=>{document.getElementById("liveStatus").textContent="Live data error";alert("Firebase error: "+error.message)})
 setTimeout(()=>{updateSoundToggle();if(!localName)openName()},500)
 </script>
