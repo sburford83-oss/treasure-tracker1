@@ -938,36 +938,3 @@ setInterval(moveHomeSections, 3000);
 </script>
 </body>
 </html>
-<script>
-function moveHomeSections() {
-  const main = document.querySelector("main.content");
-  if (!main) return;
-
-  function findCard(text) {
-    return [...main.querySelectorAll("section.card, section.grid")]
-      .find(el => el.innerText && el.innerText.includes(text));
-  }
-
-  const storeTotal = findCard("TODAY'S STORE TOTAL");
-  const todayLeader = findCard("TODAY'S LEADER");
-  const topRecruiters = findCard("TODAY'S TOP RECRUITERS");
-  const liveActivity = findCard("LIVE ACTIVITY");
-  const weekTotal = findCard("WEEK TOTAL");
-  const weeklyChampion = findCard("WEEKLY CHAMPION");
-
-  [storeTotal, todayLeader, topRecruiters, liveActivity, weekTotal, weeklyChampion]
-    .filter(Boolean)
-    .forEach(section => main.appendChild(section));
-
-  const activityRows = document.querySelectorAll("#activityFeed .activity-row");
-  activityRows.forEach((row, index) => {
-    if (index > 2) row.style.display = "none";
-  });
-}
-
-setTimeout(moveHomeSections, 800);
-setInterval(moveHomeSections, 3000);
-</script>
-</script>
-</body>
-</html>
