@@ -762,64 +762,8 @@ body.show-manager .hero{padding-bottom:82px}
     </div>
   </section>
 </section>
-</section>
-</section>
 
-<!-- REWARDS PAGE -->
-<section class="page rewards-page" id="rewardsPage" style="display:none">
-
-<section class="card">
-<div class="leader-head">
-<div class="eyebrow">Treasure Rewards</div>
-<div>🎁</div>
-</div>
-
-<h2 style="margin:0;color:#4b2b10">June Rewards</h2>
-
-<p style="margin-top:10px;color:#7b684f">
-Have you seen the rewards available through Treasure this month?
-</p>
-
-</section>
-
-<section class="card">
-<div class="eyebrow">Physical & Digital Rewards</div>
-
-<p>🌸 Perfume Atomiser</p>
-<p>📱 Phone Charm</p>
-<p>🌍 6 Month Busuu Subscription</p>
-<p>🚿 Shower Steamers</p>
-
-</section>
-
-<section class="card">
-<div class="eyebrow">Prize Draws</div>
-
-<p>🏕️ Luxury Glamping Experience</p>
-<p>🌲 Cosy Log Cabin Getaway</p>
-<p>📚 Tablet & Textbook Subscription</p>
-
-</section>
-
-<section class="card">
-<div class="eyebrow">King's Trust</div>
-
-<p>
-❤️ Redeem 5 keys and Treasure donates £5
-to The King's Trust.
-</p>
-
-</section>
-
-</section>
-
-<nav class="nav">
-<button onclick="showHome()"><span>🏠</span>Home</button>
-<button onclick="showRewards()"><span>🎁</span>Rewards</button>
-<button onclick="showConversion()"><span>🗣️</span>Conversion</button>
-<button onclick="showManagerPage()"><span>📊</span>Manager</button>
-<button onclick="openName()"><span>👤</span>Name</button>
-</nav>
+<nav class="nav"><button onclick="showHome()"><span>🏠</span>Home</button><button onclick="showConversion()"><span>🗣️</span>Conversion</button><button onclick="showManagerPage()"><span>📊</span>Manager</button><button onclick="openName()"><span>👤</span>Name</button></nav>
 </div>
 <div class="overlay" id="nameOverlay"><div class="popup"><div class="gem">💎</div><h1>Your Name</h1><p>Enter your name once. Every card after that is one tap.</p><input id="nameInput" placeholder="Type your name"><button class="main-btn" onclick="saveName()">Save Name</button></div></div>
 <div class="overlay" id="successOverlay"><div class="popup"><div class="gem">💎</div><h1 id="successTitle">Nice One!</h1><p><b id="successName">You</b>, you've recruited a Treasure customer.</p><div class="big" style="font-size:52px;margin:10px 0">+1</div><p>Today's Store Total</p><div class="big" style="font-size:52px"><span id="successTotal">0</span> <span>/ 15</span></div><button class="main-btn" onclick="closeSuccess()">Awesome</button></div></div>
@@ -958,7 +902,6 @@ window.showManagerPage=function(){
 }
 
 window.showHome=function(){document.body.classList.remove("show-conversion");document.body.classList.remove("show-manager");render()}
-window.showRewards=function(){document.body.classList.remove("show-conversion");document.body.classList.remove("show-manager");document.body.classList.add("show-rewards");render()}
 window.showConversion=function(){document.body.classList.remove("show-manager");document.body.classList.add("show-conversion");render()}
 window.saveConversionCustomers=function(){customers=parseInt(document.getElementById("conversionCustomerInput").value||"0",10)||0;localStorage.setItem("treasureCustomers",customers);render()}
 window.showHistory=function(){const recent=entries.slice(-10).reverse();alert(recent.length?recent.map(e=>new Date(e.time).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+" - "+e.name).join("\n"):"No history yet.")}
