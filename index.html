@@ -925,6 +925,36 @@ function confetti(){const colors=["#e30613","#b8893d","#fff1c9","#5f8f3a","#f46b
 function milestoneCheck(newTotal){if(newTotal>lastTotalSeen&&[3,6,10,15].includes(newTotal)){document.getElementById("successTitle").textContent=newTotal===50?"Target Achieved!":newTotal===40?"Almost There!":newTotal===25?"Halfway Push!":"Great Start!";document.getElementById("successName").textContent="Valegate";document.getElementById("successOverlay").style.display="flex";confetti()}lastTotalSeen=newTotal}
 onValue(entriesRef,snapshot=>{const val=snapshot.val()||{};entries=Object.entries(val).map(([id,data])=>({id,...data}));document.getElementById("liveStatus").textContent="Live data connected";const currentTotal=todayEntries().length;render();milestoneCheck(currentTotal)},error=>{document.getElementById("liveStatus").textContent="Live data error";alert("Firebase error: "+error.message)})
 setTimeout(()=>{updateSoundToggle();if(!localName)openName()},500)
+<script>
+function moveHomeSections() {
+  const main = document.querySelector("main.content");
+  if (!main) return;
+
+  function findCard(text) {
+    return [...main.querySelectorAll("section.card, section.grid")]
+      .find(el => el.innerText && el.innerText.includes(text));
+  }
+
+  const storeTotal = findCard("TODAY'S STORE TOTAL");
+  const todayLeader = findCard("TODAY'S LEADER");
+  const topRecruiters = findCard("TODAY'S TOP RECRUITERS");
+  const liveActivity = findCard("LIVE ACTIVITY");
+  const weekTotal = findCard("WEEK TOTAL");
+  const weeklyChampion = findCard("WEEKLY CHAMPION");
+
+  [storeTotal, todayLeader, topRecruiters, liveActivity, weekTotal, weeklyChampion]
+    .filter(Boolean)
+    .forEach(section => main.appendChild(section));
+
+  const activityRows = document.querySelectorAll("#activityFeed .activity-row");
+  activityRows.forEach((row, index) => {
+    if (index > 2) row.style.display = "none";
+  });
+}
+
+setTimeout(moveHomeSections, 800);
+setInterval(moveHomeSections, 3000);
+</script>
 </script>
 </body>
 </html>
