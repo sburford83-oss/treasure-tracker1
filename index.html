@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-title" content="Treasure">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#e30613">
-<link rel="apple-touch-icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
 
 <title>Valegate Treasure Tracker</title>
@@ -632,9 +632,50 @@ display:flex;align-items:center;justify-content:center;flex:0 0 auto;
   .option-c-title{font-size:17px!important}
 }
 
+
+/* Conversion page */
+.page{padding:0 16px 22px;margin-top:-58px;position:relative;z-index:3}
+.conversion-page{padding-bottom:110px}
+.conversion-card{margin-top:0}
+body.show-conversion main.content{display:none}
+body.show-conversion .option-c-wrap{display:none!important}
+body.show-conversion #conversionPage{display:block!important}
+body:not(.show-conversion) #conversionPage{display:none!important}
+body.show-conversion .hero{padding-bottom:82px}
+
+
+/* Manager Page */
+.manager-page{padding:0 16px 110px;margin-top:-58px;position:relative;z-index:3}
+body.show-manager main.content{display:none}
+body.show-manager .option-c-wrap{display:none!important}
+body.show-manager #conversionPage{display:none!important}
+body.show-manager #managerPage{display:block!important}
+body:not(.show-manager) #managerPage{display:none!important}
+body.show-manager .hero{padding-bottom:82px}
+.manager-action-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px}
+.manager-action{width:100%;border:none;border-radius:18px;padding:16px;text-align:left;font-size:18px;font-weight:950;background:#fff7e8;color:#4b2b10;border:1px solid rgba(91,53,21,.12);box-shadow:0 8px 18px rgba(59,34,14,.08)}
+.manager-action span{display:block;font-size:13px;font-weight:750;color:#7b684f;margin-top:4px}
+.manager-action.danger{background:linear-gradient(135deg,#fff0f0,#ffe4e4);color:#9b0009;border-color:rgba(227,6,19,.20)}
+.manager-action.primary{background:linear-gradient(135deg,#4b2b10,#8d5f2a);color:white}
+.manager-action.primary span{color:rgba(255,255,255,.82)}
+.manager-summary-box{white-space:pre-line;background:#fff7e8;border-radius:18px;padding:15px;margin-top:12px;text-align:left;color:#4b2b10;font-weight:750;border:1px solid rgba(91,53,21,.10)}
+.last-card-box{background:#fffaf2;border:1px solid rgba(91,53,21,.10);border-radius:18px;padding:14px;margin-top:12px;text-align:left}
+.last-card-box b{display:block;font-size:18px;color:#4b2b10}
+.last-card-box small{color:#7b684f}
+
+
+/* Treasure Bell Feedback */
+.treasure-bell-banner{position:fixed;left:50%;top:18px;transform:translateX(-50%) translateY(-120px);width:calc(100% - 32px);max-width:440px;z-index:999;background:linear-gradient(135deg,#e30613,#ff4d57);color:white;border-radius:24px;padding:16px 18px;box-shadow:0 18px 34px rgba(227,6,19,.36);display:flex;align-items:center;gap:12px;opacity:0;transition:transform .35s ease,opacity .35s ease;pointer-events:none}
+.treasure-bell-banner.show{transform:translateX(-50%) translateY(0);opacity:1}
+.treasure-bell-icon{width:46px;height:46px;border-radius:17px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:25px;flex:0 0 auto}
+.treasure-bell-title{font-weight:950;font-size:17px;line-height:1.1;text-transform:uppercase;letter-spacing:.4px}
+.treasure-bell-sub{font-size:13px;font-weight:800;opacity:.92;margin-top:3px}
+.sound-toggle{position:fixed;right:14px;bottom:92px;z-index:30;border:none;border-radius:999px;background:rgba(45,24,8,.92);color:white;padding:10px 12px;font-weight:900;box-shadow:0 8px 18px rgba(0,0,0,.22)}
+
 </style>
 </head>
 <body>
+<div class="treasure-bell-banner" id="treasureBellBanner"><div class="treasure-bell-icon">🔔</div><div><div class="treasure-bell-title">Treasure Bell!</div><div class="treasure-bell-sub" id="treasureBellText">Treasure customer recruited 💎</div></div></div><button class="sound-toggle" id="soundToggle" onclick="toggleTreasureSound()">🔇 Sound Off</button>
 <div class="app">
 <header class="hero"><div class="hero-inner"><div class="gem">💎</div><div class="title">TREASURE</div><div class="store-pill">🏪 VALEGATE</div><br><div class="live-pill"><span class="live-dot"></span><span id="liveStatus">Connecting live data...</span></div></div></header>
 <div class="option-c-wrap">
@@ -674,41 +715,60 @@ display:flex;align-items:center;justify-content:center;flex:0 0 auto;
 </section>
 <section class="card"><div class="target-head"><span>Today's Store Total</span><span class="target-badge">Target 15</span></div><div class="big"><span id="todayTotal">0</span> <span>/ 15</span></div><div class="progress"><div class="bar" id="bar">0%</div></div><div class="remaining"><b id="remaining">50</b> more needed today 💎</div><div class="milestones"><div class="milestone" id="m10">3 🎉</div><div class="milestone" id="m25">6 🚀</div><div class="milestone" id="m40">10 🔥</div><div class="milestone" id="m50">15 🏆</div></div></section>
 <section class="grid"><div class="card stat-card"><div class="stat-icon">📅</div><div class="eyebrow">Week Total</div><strong id="weekTotal">0</strong></div><div class="card stat-card"><div class="stat-icon">🏆</div><div class="eyebrow">Best Today</div><strong id="bestToday">-</strong><small id="bestCards">0 cards</small></div></section>
-<section class="card">
-<div class="leader-head"><div class="eyebrow">Treasure Conversion</div><div>📊</div></div>
-<div class="eyebrow">Customers today</div>
-<input class="conv-input" id="customerInput" type="number" inputmode="numeric" placeholder="Enter footfall" oninput="saveCustomers()">
-<div class="conversion-grid">
-<div class="conv-box"><div class="eyebrow">Current</div><b id="conversionNow">-</b><small>customers per card</small></div>
-<div class="conv-box"><div class="eyebrow">Target</div><b>1 in 200</b><small>Treasure goal</small></div>
-<div class="conv-box"><div class="eyebrow">Expected</div><b id="expectedCards">0</b><small>cards needed</small></div>
-<div class="conv-box"><div class="eyebrow">Gap</div><b id="conversionGap">0</b><small>more cards</small></div>
-</div>
-<div class="conv-status" id="conversionStatus">Enter today’s customer count to calculate conversion.</div>
-</section>
 <button class="add-btn" onclick="addTreasure()"><div class="add-gem">💎</div><div><b>Treasure Found</b><small>Tap here to add a card</small></div></button>
 
 <section class="card">
   <div class="leader-head"><div class="eyebrow">Live Activity</div><div>✨</div></div>
   <div id="activityFeed"><p style="color:#7b684f">No activity yet today.</p></div>
 </section>
-<section class="card install-card">
-  <div class="install-row">
-    <div class="install-icon">📱</div>
-    <div>
-      <div class="eyebrow">iPhone App Icon Ready</div>
-      <strong>Add to Home Screen</strong>
-      <p>Open in Safari, tap Share, then Add to Home Screen for an app-style shortcut.</p>
-    </div>
-  </div>
-</section>
 <section class="card"><div class="leader-head"><div class="eyebrow">Today's Top Recruiters</div><div>🏅</div></div><div id="leaderboard"><p>Loading leaderboard...</p></div></section>
 </main>
-<nav class="nav"><button onclick="render()"><span>🏠</span>Home</button><button onclick="showHistory()"><span>🕘</span>History</button><button onclick="openManager()"><span>📊</span>Manager</button><button onclick="openName()"><span>👤</span>Name</button></nav>
+<section class="page conversion-page" id="conversionPage" style="display:none">
+  <section class="card conversion-card">
+    <div class="leader-head"><div class="eyebrow">Treasure Conversion</div><div>📊</div></div>
+    <div class="eyebrow">Customers today</div>
+    <input class="conv-input" id="conversionCustomerInput" type="number" inputmode="numeric" placeholder="Enter footfall" oninput="saveConversionCustomers()">
+    <div class="conversion-grid">
+      <div class="conv-box"><div class="eyebrow">Current</div><b id="pageConversionNow">-</b><small>customers per card</small></div>
+      <div class="conv-box"><div class="eyebrow">Target</div><b>1 in 200</b><small>Treasure goal</small></div>
+      <div class="conv-box"><div class="eyebrow">Expected</div><b id="pageExpectedCards">0</b><small>cards needed</small></div>
+      <div class="conv-box"><div class="eyebrow">Gap</div><b id="pageConversionGap">0</b><small>more cards</small></div>
+    </div>
+    <div class="conv-status" id="pageConversionStatus">Enter today’s customer count to calculate conversion.</div>
+  </section>
+</section>
+
+
+<section class="page manager-page" id="managerPage" style="display:none">
+  <section class="card">
+    <div class="leader-head"><div class="eyebrow">Manager Dashboard</div><div>📊</div></div>
+    <div class="manager-summary-box" id="managerPageText">Loading manager summary...</div>
+  </section>
+
+  <section class="card">
+    <div class="leader-head"><div class="eyebrow">Last Treasure Entry</div><div>↩️</div></div>
+    <div class="last-card-box" id="lastTreasureBox">No entries yet today.</div>
+    <div class="manager-action-grid">
+      <button class="manager-action danger" onclick="deleteLastTreasure()">Delete Last Treasure Card<span>Use this if someone double-pressed by mistake.</span></button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="leader-head"><div class="eyebrow">Manager Options</div><div>⚙️</div></div>
+    <div class="manager-action-grid">
+      <button class="manager-action primary" onclick="copySummary()">Copy Daily Summary<span>Copies today’s update, leaderboard and conversion.</span></button>
+      <button class="manager-action" onclick="resetToday()">Reset Today<span>Clears only today’s Treasure entries. Code required.</span></button>
+      <button class="manager-action danger" onclick="resetAllTotals()">Reset All Totals<span>Clears every saved Treasure entry. Code and confirmation required.</span></button>
+    </div>
+  </section>
+</section>
+
+<nav class="nav"><button onclick="showHome()"><span>🏠</span>Home</button><button onclick="showConversion()"><span>🗣️</span>Conversion</button><button onclick="showManagerPage()"><span>📊</span>Manager</button><button onclick="openName()"><span>👤</span>Name</button></nav>
 </div>
 <div class="overlay" id="nameOverlay"><div class="popup"><div class="gem">💎</div><h1>Your Name</h1><p>Enter your name once. Every card after that is one tap.</p><input id="nameInput" placeholder="Type your name"><button class="main-btn" onclick="saveName()">Save Name</button></div></div>
 <div class="overlay" id="successOverlay"><div class="popup"><div class="gem">💎</div><h1 id="successTitle">Nice One!</h1><p><b id="successName">You</b>, you've recruited a Treasure customer.</p><div class="big" style="font-size:52px;margin:10px 0">+1</div><p>Today's Store Total</p><div class="big" style="font-size:52px"><span id="successTotal">0</span> <span>/ 15</span></div><button class="main-btn" onclick="closeSuccess()">Awesome</button></div></div>
-<div class="overlay" id="managerOverlay"><div class="popup"><h1>Manager View</h1><p id="managerText">Loading...</p><button class="ghost-btn" onclick="copySummary()">Copy Daily Summary</button><button class="ghost-btn" onclick="resetToday()">Reset Today</button><button class="ghost-btn" onclick="resetAllTotals()">Reset All Totals</button><button class="main-btn" onclick="closeManager()">Close</button></div></div>
+<div class="overlay" id="managerOverlay"><div class="popup"><h1>Manager View</h1>
+<p id="managerText">Loading...</p><button class="ghost-btn" onclick="copySummary()">Copy Daily Summary</button><button class="ghost-btn" onclick="resetToday()">Reset Today</button><button class="ghost-btn" onclick="resetAllTotals()">Reset All Totals</button><button class="main-btn" onclick="closeManager()">Close</button></div></div>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import{getDatabase,ref,push,onValue,remove,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
@@ -716,14 +776,24 @@ const firebaseConfig={apiKey:"AIzaSyB1mIRzjLZTE8MhH6ArcXtFxrHNsDN79SE",authDomai
 const TARGET=15,MANAGER_PIN="6530",RESET_PIN="0356";
 const app=initializeApp(firebaseConfig),db=getDatabase(app),entriesRef=ref(db,"stores/valegate/entries");
 let localName=localStorage.getItem("treasureName")||"",entries=[],lastTotalSeen=0,customers=parseInt(localStorage.getItem("treasureCustomers")||"0",10)||0;
+
+let treasureSoundOn=localStorage.getItem("treasureSoundOn")==="true";
+function updateSoundToggle(){const btn=document.getElementById("soundToggle");if(btn)btn.textContent=treasureSoundOn?"🔔 Sound On":"🔇 Sound Off"}
+window.toggleTreasureSound=function(){treasureSoundOn=!treasureSoundOn;localStorage.setItem("treasureSoundOn",treasureSoundOn?"true":"false");updateSoundToggle();if(treasureSoundOn)playTreasureSound()}
+function treasureHaptic(){try{if(navigator.vibrate)navigator.vibrate([80,40,80])}catch(e){}}
+function playTreasureSound(){if(!treasureSoundOn)return;try{const AudioContext=window.AudioContext||window.webkitAudioContext;if(!AudioContext)return;const ctx=new AudioContext();const osc=ctx.createOscillator();const gain=ctx.createGain();osc.type="sine";osc.frequency.setValueAtTime(880,ctx.currentTime);osc.frequency.setValueAtTime(1175,ctx.currentTime+0.08);gain.gain.setValueAtTime(0.0001,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(0.08,ctx.currentTime+0.02);gain.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.22);osc.connect(gain);gain.connect(ctx.destination);osc.start();osc.stop(ctx.currentTime+0.24)}catch(e){}}
+function showTreasureBell(name){const banner=document.getElementById("treasureBellBanner");const text=document.getElementById("treasureBellText");if(!banner)return;if(text)text.textContent=(name||"Someone")+" recruited a Treasure customer 💎";banner.classList.add("show");clearTimeout(window.__treasureBellTimer);window.__treasureBellTimer=setTimeout(()=>banner.classList.remove("show"),2600)}
+function treasureFeedback(name){treasureHaptic();playTreasureSound();showTreasureBell(name)}
+
 function todayKey(){return new Date().toISOString().slice(0,10)}
 function weekKey(dateString){const d=new Date(dateString+"T00:00:00"),onejan=new Date(d.getFullYear(),0,1);return d.getFullYear()+"-W"+Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7)}
 function thisWeekKey(){return weekKey(todayKey())}
 window.openName=function(){document.getElementById("nameInput").value=localName;document.getElementById("nameOverlay").style.display="flex"}
 window.saveName=function(){const n=document.getElementById("nameInput").value.trim();if(!n){alert("Please type your name first.");return}localName=n;localStorage.setItem("treasureName",n);document.getElementById("nameOverlay").style.display="none";render()}
-window.addTreasure=function(){if(!localName){openName();return}push(entriesRef,{store:"Valegate",name:localName,date:todayKey(),week:thisWeekKey(),time:new Date().toISOString(),createdAt:serverTimestamp()}).then(()=>{confetti();document.getElementById("successName").textContent=localName;document.getElementById("successTitle").textContent="Nice One!";document.getElementById("successOverlay").style.display="flex"}).catch(err=>alert("Could not save card: "+err.message))}
+window.addTreasure=function(){if(!localName){openName();return}push(entriesRef,{store:"Valegate",name:localName,date:todayKey(),week:thisWeekKey(),time:new Date().toISOString(),createdAt:serverTimestamp()}).then(()=>{confetti();treasureFeedback(localName);document.getElementById("successName").textContent=localName;document.getElementById("successTitle").textContent="Nice One!";document.getElementById("successOverlay").style.display="flex"}).catch(err=>alert("Could not save card: "+err.message))}
 window.closeSuccess=function(){document.getElementById("successOverlay").style.display="none"}
-window.render=render;window.saveCustomers=function(){customers=parseInt(document.getElementById("customerInput").value||"0",10)||0;localStorage.setItem("treasureCustomers",customers);render()}
+window.render=render;window.saveCustomers=function(){const el=document.getElementById("customerInput")||document.getElementById("managerCustomerInput");customers=parseInt((el&&el.value)||"0",10)||0;localStorage.setItem("treasureCustomers",customers);render()}
+window.saveManagerCustomers=function(){customers=parseInt(document.getElementById("managerCustomerInput").value||"0",10)||0;localStorage.setItem("treasureCustomers",customers);render()}
 function todayEntries(){return entries.filter(e=>e.date===todayKey())}
 function weekEntries(){return entries.filter(e=>e.week===thisWeekKey())}
 function todayCounts(){const counts={};todayEntries().forEach(e=>counts[e.name]=(counts[e.name]||0)+1);return counts}
@@ -742,10 +812,53 @@ function render(){document.getElementById("nameText").textContent=localName||"Te
 const expected=customers?Math.ceil(customers/200):0;
 const gap=Math.max(0,expected-total);
 const conv=total>0&&customers?Math.round(customers/total):0;
-document.getElementById("expectedCards").textContent=expected;
-document.getElementById("conversionGap").textContent=gap;
-document.getElementById("conversionNow").textContent=conv?("1 in "+conv):"-";
-document.getElementById("conversionStatus").textContent=!customers?"Enter today’s customer count to calculate conversion.":total>=expected?"On target — great Treasure conversion today.":("Need "+gap+" more card"+(gap===1?"":"s")+" to hit 1 in 200.");
+if(document.getElementById("expectedCards"))document.getElementById("expectedCards").textContent=expected;
+if(document.getElementById("conversionGap"))document.getElementById("conversionGap").textContent=gap;
+if(document.getElementById("conversionNow"))document.getElementById("conversionNow").textContent=conv?("1 in "+conv):"-";
+if(document.getElementById("conversionStatus"))document.getElementById("conversionStatus").textContent=!customers?"Enter today’s customer count to calculate conversion.":total>=expected?"On target — great Treasure conversion today.":("Need "+gap+" more card"+(gap===1?"":"s")+" to hit 1 in 200.");
+  if(document.getElementById("managerCustomerInput"))if(document.getElementById("managerCustomerInput"))document.getElementById("managerCustomerInput").value=customers||"";
+  if(document.getElementById("managerExpectedCards"))if(document.getElementById("managerExpectedCards"))document.getElementById("managerExpectedCards").textContent=expected;
+  if(document.getElementById("managerConversionGap"))if(document.getElementById("managerConversionGap"))document.getElementById("managerConversionGap").textContent=gap;
+  if(document.getElementById("managerConversionNow"))if(document.getElementById("managerConversionNow"))document.getElementById("managerConversionNow").textContent=conv?("1 in "+conv):"-";
+  if(document.getElementById("managerConversionStatus"))if(document.getElementById("managerConversionStatus"))document.getElementById("managerConversionStatus").textContent=!customers?"Enter today’s customer count to calculate conversion.":total>=expected?"On target — great Treasure conversion today.":("Need "+gap+" more card"+(gap===1?"":"s")+" to hit 1 in 200.");
+
+
+  if(document.getElementById("conversionCustomerInput"))document.getElementById("conversionCustomerInput").value=customers||"";
+  if(document.getElementById("pageExpectedCards"))document.getElementById("pageExpectedCards").textContent=expected;
+  if(document.getElementById("pageConversionGap"))document.getElementById("pageConversionGap").textContent=gap;
+  if(document.getElementById("pageConversionNow"))document.getElementById("pageConversionNow").textContent=conv?("1 in "+conv):"-";
+  if(document.getElementById("pageConversionStatus"))document.getElementById("pageConversionStatus").textContent=!customers?"Enter today’s customer count to calculate conversion.":total>=expected?"On target — great Treasure conversion today.":("Need "+gap+" more card"+(gap===1?"":"s")+" to hit 1 in 200.");
+
+
+  if(document.getElementById("managerPageText")){
+    const managerList=Object.entries(todayCounts()).sort((a,b)=>b[1]-a[1]);
+    const wManagerList=Object.entries(weekCounts()).sort((a,b)=>b[1]-a[1]);
+    const expectedMgr=customers?Math.ceil(customers/200):0;
+    const gapMgr=Math.max(0,expectedMgr-total);
+    const convMgr=total>0&&customers?Math.round(customers/total):0;
+    document.getElementById("managerPageText").textContent=[
+      "TODAY",
+      "Cards: "+total+" / "+TARGET,
+      "Remaining: "+Math.max(0,TARGET-total),
+      "Leader: "+(managerList.length?managerList[0][0]+" ("+managerList[0][1]+")":"No leader yet"),
+      "",
+      "WEEK",
+      "Week Total: "+weekEntries().length,
+      "Weekly Champion: "+(wManagerList.length?wManagerList[0][0]+" ("+wManagerList[0][1]+")":"No champion yet"),
+      "",
+      "CONVERSION",
+      "Customers: "+(customers||"Not entered"),
+      "Current: "+(convMgr?("1 in "+convMgr):"-"),
+      "Target: 1 in 200",
+      "Expected Cards: "+expectedMgr,
+      "Conversion Gap: "+gapMgr
+    ].join("\n");
+  }
+  if(document.getElementById("lastTreasureBox")){
+    const last=todayEntries().slice(-1)[0];
+    document.getElementById("lastTreasureBox").innerHTML=last?("<b>"+last.name+"</b><small>"+new Date(last.time).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+" · Last card logged today</small>"):"No entries yet today.";
+  }
+
 const list=Object.entries(todayCounts()).sort((a,b)=>b[1]-a[1]);document.getElementById("bestToday").textContent=list.length?list[0][0]:"-";document.getElementById("bestCards").textContent=list.length?list[0][1]+" cards":"0 cards";document.getElementById("dailyLeader").textContent=list.length?list[0][0]:"No leader yet";document.getElementById("dailyLeaderCards").textContent=list.length?list[0][1]+" Treasure cards today":"Start the challenge";if(document.getElementById("topButtonLeader"))document.getElementById("topButtonLeader").textContent=list.length?("👑 "+list[0][0]+" leading"):"👑 No leader yet";
   const wList=Object.entries(weekCounts()).sort((a,b)=>b[1]-a[1]);
   if(document.getElementById("weeklyChampion")){
@@ -774,20 +887,44 @@ function renderActivity(){
   recent.forEach(e=>{
     const row=document.createElement("div");
     row.className="activity-row";
-    row.innerHTML='<div class="activity-icon">💎</div><div><div class="activity-main">'+e.name+' added a Treasure card</div><div class="activity-time">'+timeAgo(e.time)+'</div></div>';
+    row.innerHTML='<div class="activity-icon">💎</div><div><div class="activity-main">'+e.name+' recruited a Treasure customer 💎</div><div class="activity-time">'+timeAgo(e.time)+'</div></div>';
     feed.appendChild(row);
   });
 }
+
+
+window.showManagerPage=function(){
+  const pin=prompt("Manager access code:");
+  if(pin!==MANAGER_PIN){alert("Incorrect manager code.");return}
+  document.body.classList.remove("show-conversion");
+  document.body.classList.add("show-manager");
+  render();
+}
+
+window.showHome=function(){document.body.classList.remove("show-conversion");document.body.classList.remove("show-manager");render()}
+window.showConversion=function(){document.body.classList.remove("show-manager");document.body.classList.add("show-conversion");render()}
+window.saveConversionCustomers=function(){customers=parseInt(document.getElementById("conversionCustomerInput").value||"0",10)||0;localStorage.setItem("treasureCustomers",customers);render()}
 window.showHistory=function(){const recent=entries.slice(-10).reverse();alert(recent.length?recent.map(e=>new Date(e.time).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+" - "+e.name).join("\n"):"No history yet.")}
 window.openManager=function(){const pin=prompt("Manager access code:");if(pin!==MANAGER_PIN){alert("Incorrect manager code.");return}const list=Object.entries(todayCounts()).sort((a,b)=>b[1]-a[1]),todayTotal=todayEntries().length,pct=Math.round((todayTotal/TARGET)*100);const lines=["VALEGATE TREASURE UPDATE","","Today's Total: "+todayTotal+" / "+TARGET,"Achievement: "+pct+"%","Remaining: "+Math.max(0,TARGET-todayTotal),"Week Total: "+weekEntries().length,"","Today's Leader:",list.length?list[0][0]+" - "+list[0][1]:"No cards logged yet","","Leaderboard:",...(list.length?list.map((x,i)=>(i+1)+". "+x[0]+" - "+x[1]):["No cards logged yet."])];document.getElementById("managerText").innerText=lines.join("\n");document.getElementById("managerOverlay").style.display="flex"}
-window.closeManager=function(){document.getElementById("managerOverlay").style.display="none"}
+window.closeManager=function(){document.getElementById("managerOverlay").style.display="none";document.body.classList.remove("show-manager")}
 window.copySummary=function(){navigator.clipboard.writeText(document.getElementById("managerText").innerText).then(()=>alert("Daily summary copied."))}
+
+window.deleteLastTreasure=function(){
+  const pin=prompt("Manager code:");
+  if(pin!==MANAGER_PIN){alert("Incorrect manager code.");return}
+  const last=todayEntries().slice(-1)[0];
+  if(!last){alert("No Treasure cards to delete today.");return}
+  if(confirm("Delete last Treasure card from "+last.name+"?")){
+    remove(ref(db,"stores/valegate/entries/"+last.id)).then(()=>alert("Last Treasure card deleted.")).catch(err=>alert("Could not delete last card: "+err.message));
+  }
+}
+
 window.resetToday=function(){const pin=prompt("Reset code:");if(pin!==RESET_PIN){alert("Incorrect reset code.");return}if(confirm("Reset today's Valegate entries?")){Promise.all(todayEntries().map(e=>remove(ref(db,"stores/valegate/entries/"+e.id)))).then(()=>alert("Today reset."))}}
 window.resetAllTotals=function(){const pin=prompt("Reset ALL totals code:");if(pin!==RESET_PIN){alert("Incorrect reset code.");return}const confirmText=prompt("Type RESET ALL to clear every Treasure entry:");if(confirmText!=="RESET ALL"){alert("Reset cancelled.");return}remove(entriesRef).then(()=>alert("All Treasure totals have been reset.")).catch(err=>alert("Could not reset all totals: "+err.message))}
 function confetti(){const colors=["#e30613","#b8893d","#fff1c9","#5f8f3a","#f46b36"];for(let i=0;i<85;i++){const c=document.createElement("div");c.className="confetti";c.style.left=Math.random()*100+"vw";c.style.background=colors[Math.floor(Math.random()*colors.length)];c.style.animationDelay=Math.random()*0.6+"s";document.body.appendChild(c);setTimeout(()=>c.remove(),2500)}}
 function milestoneCheck(newTotal){if(newTotal>lastTotalSeen&&[3,6,10,15].includes(newTotal)){document.getElementById("successTitle").textContent=newTotal===50?"Target Achieved!":newTotal===40?"Almost There!":newTotal===25?"Halfway Push!":"Great Start!";document.getElementById("successName").textContent="Valegate";document.getElementById("successOverlay").style.display="flex";confetti()}lastTotalSeen=newTotal}
 onValue(entriesRef,snapshot=>{const val=snapshot.val()||{};entries=Object.entries(val).map(([id,data])=>({id,...data}));document.getElementById("liveStatus").textContent="Live data connected";const currentTotal=todayEntries().length;render();milestoneCheck(currentTotal)},error=>{document.getElementById("liveStatus").textContent="Live data error";alert("Firebase error: "+error.message)})
-setTimeout(()=>{if(!localName)openName()},500)
+setTimeout(()=>{updateSoundToggle();if(!localName)openName()},500)
 </script>
 </body>
 </html>
