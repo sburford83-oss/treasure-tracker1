@@ -752,7 +752,14 @@ body.show-manager .hero{padding-bottom:82px}
       <button class="manager-action danger" onclick="deleteLastTreasure()">Delete Last Treasure Card<span>Use this if someone double-pressed by mistake.</span></button>
     </div>
   </section>
-
+<section class="card">
+    <div class="leader-head">
+        <div class="eyebrow">🏆 Weekly Top 3 Recruiters</div>
+    </div>
+    <div id="weeklyTop3Manager">
+        Loading...
+    </div>
+</section>
   <section class="card">
     <div class="leader-head"><div class="eyebrow">Manager Options</div><div>⚙️</div></div>
     <div class="manager-action-grid">
@@ -798,6 +805,11 @@ function todayEntries(){return entries.filter(e=>e.date===todayKey())}
 function weekEntries(){return entries.filter(e=>e.week===thisWeekKey())}
 function todayCounts(){const counts={};todayEntries().forEach(e=>counts[e.name]=(counts[e.name]||0)+1);return counts}
 function weekCounts(){const counts={};weekEntries().forEach(e=>counts[e.name]=(counts[e.name]||0)+1);return counts}
+function weeklyTop3(){
+  return Object.entries(weekCounts())
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,3);
+}
 function render(){document.getElementById("nameText").textContent=localName||"Team";const total=todayEntries().length,pct=Math.min(100,Math.round((total/TARGET)*100));document.getElementById("todayTotal").textContent=total;
   if(document.getElementById("optionCTotal"))document.getElementById("optionCTotal").textContent=total;
   if(document.getElementById("optionCButton")){
@@ -820,7 +832,14 @@ if(document.getElementById("conversionStatus"))document.getElementById("conversi
   if(document.getElementById("managerExpectedCards"))if(document.getElementById("managerExpectedCards"))document.getElementById("managerExpectedCards").textContent=expected;
   if(document.getElementById("managerConversionGap"))if(document.getElementById("managerConversionGap"))document.getElementById("managerConversionGap").textContent=gap;
   if(document.getElementById("managerConversionNow"))if(document.getElementById("managerConversionNow"))document.getElementById("managerConversionNow").textContent=conv?("1 in "+conv):"-";
-  if(document.getElementById("managerConversionStatus"))if(document.getElementById("managerConversionStatus"))document.getElementById("managerConversionStatus").textContent=!customers?"Enter today’s customer count to calculate conversion.":total>=expected?"On target — great Treasure conversion today.":("Need "+gap+" more card"+(gap===1?"":"s")+" to hit 1 in 200.");
+  if(document.getElementById("managerConversionStatus"))if(document.getElementById("managerConversionStatus"))document.getElementById("managerConversionStatus").textContent=!customers?"Enter today’s customer count to calculate conversion.":total>=expected?"On target — great Treasure conversion today.":("Need "+gap+" more card"+(gap===1?"":"s")+" to hit 1 in 200.");const weeklyTop3Box=document.getElementById("weeklyTop3Manager");
+  const weeklyTop3Box=document.getElementById("weeklyTop3Manager");
+if(weeklyTop3Box){
+  const top3=weeklyTop3();
+  weeklyTop3Box.innerHTML=top3.length
+  ? top3.map((x,i)=>'<div class="row"><div class="score">'+(i+1)+'</div><div>'+x[0]+'</div><div class="score">'+x[1]+'</div></div>').join("")
+  : '<p style="color:#7b684f;font-weight:800">No weekly Treasure cards yet.</p>';
+}
 
 
   if(document.getElementById("conversionCustomerInput"))document.getElementById("conversionCustomerInput").value=customers||"";
